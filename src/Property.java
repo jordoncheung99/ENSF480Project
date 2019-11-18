@@ -3,6 +3,11 @@ public class Property {
     private float rentTerm;
     private float area;
     private String typeOfProperty;
+    private int numOfBedRooms;
+    private int numOfBathRooms;
+    private boolean furnished;
+    private Address address;
+    private int listID;
 
 
 
