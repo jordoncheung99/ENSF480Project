@@ -82,6 +82,7 @@ public class RPMS {
             return  false;
         }
         listing.findID(proprtyToActive).datePaid = new Date(Instant.now().getEpochSecond());
+
         return  true;
     }
 
