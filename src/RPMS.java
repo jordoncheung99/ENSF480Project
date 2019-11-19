@@ -24,15 +24,16 @@ public class RPMS {
     }
 
     public void registerObserver(Observer observer){
-        //TODO implement register observer
+        observers.add(observer);
     }
 
     public void removeObserver(Observer observer){
-        //TODO implement remove Observer
+        observers.remove(observer);
     }
 
     public void notifyObservers(){
         //TODO implement notify Observers
+        //if a listing is modifed or a new property is listed notify Observers (renters)
     }
 
     public void removeProperty(int propertyID){
