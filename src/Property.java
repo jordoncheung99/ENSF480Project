@@ -2,16 +2,65 @@ public class Property {
     private float rentAmmount;
     private float rentTerm;
     private float area;
-    private String typeOfProperty;
     private int numOfBedRooms;
     private int numOfBathRooms;
     private boolean furnished;
     private Address address;
+    private String typeOfProperty;
     private int listID;
 
-
-
-    public static void main(String arg[]){
-
+    Property(float rentAmmount, float rentTerm, float area, int numOfBathRooms, int numOfBedRooms, boolean furnished, Address address, String typeOfProperty, int listID){
+        this.rentAmmount = rentAmmount;
+        this.rentTerm = rentTerm;
+        this.area = area;
+        this.numOfBedRooms = numOfBedRooms;
+        this.numOfBathRooms = numOfBathRooms;
+        this.furnished = furnished;
+        this.address = address;
+        this.typeOfProperty = typeOfProperty;
+        this.listID = listID;
     }
+
+    public float getRentAmmount(){
+        return  rentAmmount;
+    }
+
+    public float getRentTerm(){
+        return rentTerm;
+    }
+
+    public float getArea(){
+        return area;
+    }
+
+    public int getNumOfBedRooms(){
+        return  numOfBedRooms;
+    }
+
+    public int getNumOfBathRooms(){
+        return numOfBathRooms;
+    }
+
+    public boolean getFurnished(){
+        return furnished;
+    }
+
+    public Address getAddress(){
+        return  address;
+    }
+
+    public String getTypeOfProperty(){
+        return typeOfProperty;
+    }
+
+    public int getListID(){
+        return  listID;
+    }
+
+    public String toString(){
+        String sendBack = rentAmmount + " " + rentTerm + " " + area + " " + numOfBedRooms + " " + numOfBathRooms + " " + furnished;
+        sendBack += " " + address.toString() + " " + typeOfProperty + " " + listID;
+        return  sendBack;
+    }
+
 }
