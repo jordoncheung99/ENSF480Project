@@ -2,19 +2,44 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class PropertyListing {
-    public  static  void main(String args[]){
-        PropertyListing listings = new PropertyListing();
-        listings.loadDataBase();
-        Address address = new Address("street", "Calgary", "AB", "Canada", "T3K9D2", "NW");
-        Property property = new Property(100,2,100,2,1,true,address, "Condo", 123);
-        listings.addProperty(property);
-        listings.saveDataBase();
-    }
-
+    //TODO Update to work with a database
     private ArrayList<Property> properties;
 
     PropertyListing(){
         properties = new ArrayList<>();
+    }
+
+    public int getSize(){
+        return properties.size();
+    }
+
+    public int getNumRented(){
+        int count = 0;
+        for (Property prop: properties){
+            if (prop.rented){
+                count++;
+            }
+        }
+        return  count;
+    }
+
+    public  int getNumActive(){
+        int count = 0;
+        for(Property prop: properties){
+            if(prop.active){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    void modifyProperty(int listID, Property property){
+        for(int i = 0; i < properties.size(); i++){
+            if(properties.get(i).getListID() == listID){
+                properties.set(i,property);
+                return;
+            }
+        }
     }
 
     void addProperty(Property property){
@@ -28,8 +53,26 @@ public class PropertyListing {
         properties.add(property);
     }
 
+    void removeProperty(int propID){
+        for (int i = 0; i < properties.size(); i++){
+            if (properties.get(i).getListID() == propID){
+                properties.remove(i);
+                return;
+            }
+        }
+    }
+
     ArrayList<Property> getProperties(){
         return properties;
+    }
+
+    public Property findID(int propertyID){
+        for (Property prop: properties){
+            if(prop.getListID() == propertyID){
+                return prop;
+            }
+        }
+        return null;
     }
 
     public void loadDataBase(){
@@ -49,7 +92,10 @@ public class PropertyListing {
                 boolean furnished = Boolean.parseBoolean(parts[5]);
                 String typeOfProperty = parts[12];
                 int listID = Integer.parseInt(parts[13]);
-                properties.add(new Property(rentAmmount,rentTerm,area,numOfBedRooms,numOfBathRoom,furnished,address,typeOfProperty,listID));
+                boolean active = Boolean.parseBoolean(parts[14]);
+                boolean rented = Boolean.parseBoolean(parts[15]);
+                boolean suspended = Boolean.parseBoolean(parts[16]);
+                properties.add(new Property(rentAmmount,rentTerm,area,numOfBedRooms,numOfBathRoom,furnished,address,typeOfProperty,listID, active, rented,suspended));
                 //properties.add(new Property(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5], add, parts[6],parts[6],parts[6],parts[6],));
             }
         } catch (FileNotFoundException e) {

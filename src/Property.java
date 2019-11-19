@@ -8,8 +8,11 @@ public class Property {
     private Address address;
     private String typeOfProperty;
     private int listID;
+    boolean active;
+    boolean rented;
+    boolean suspended;
 
-    Property(float rentAmmount, float rentTerm, float area, int numOfBathRooms, int numOfBedRooms, boolean furnished, Address address, String typeOfProperty, int listID){
+    Property(float rentAmmount, float rentTerm, float area, int numOfBathRooms, int numOfBedRooms, boolean furnished, Address address, String typeOfProperty, int listID, boolean active, boolean rented, boolean suspended){
         this.rentAmmount = rentAmmount;
         this.rentTerm = rentTerm;
         this.area = area;
@@ -19,6 +22,9 @@ public class Property {
         this.address = address;
         this.typeOfProperty = typeOfProperty;
         this.listID = listID;
+        this.active = active;
+        this.rented = rented;
+        this.suspended = suspended;
     }
 
     public float getRentAmmount(){
@@ -57,9 +63,17 @@ public class Property {
         return  listID;
     }
 
+    public boolean getActive(){
+        return  active;
+    }
+
+    public boolean getRented(){
+        return rented;
+    }
+
     public String toString(){
         String sendBack = rentAmmount + " " + rentTerm + " " + area + " " + numOfBedRooms + " " + numOfBathRooms + " " + furnished;
-        sendBack += " " + address.toString() + " " + typeOfProperty + " " + listID;
+        sendBack += " " + address.toString() + " " + typeOfProperty + " " + listID  + " " +  active  + " " +  rented + " " + suspended;
         return  sendBack;
     }
 

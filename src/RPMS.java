@@ -10,17 +10,43 @@ public class RPMS {
     ArrayList<Observer> observers;
     private Filter filter;
 
+
+    public  static  void main(String args[]){
+        RPMS rpms = new RPMS();
+        System.out.println("num Props: " + rpms.numProperties);
+        System.out.println("num Rented: " + rpms.numRented );
+        System.out.println("num Listed: " + rpms.numListed);
+        Address address = new Address("street", " Calgary", "AB", "Canada", "T3k9D2", "NW");
+        Property property = new Property(100,200,100,1,2,true,address,"Condo", 123, true, false, false);
+        rpms.modifyListing(123,property);
+        rpms.listing.saveDataBase();
+    }
+
+    RPMS(){
+        observers = new ArrayList<>();
+        listing = new PropertyListing();
+        listing.loadDataBase();
+        periodOfFees = 100;
+        feeAmmount = 200;
+        numProperties = listing.getSize();
+        numRented = listing.getNumRented();
+        numListed = listing.getNumActive();
+    }
+
     public PropertyListing filterSearch(Criteria criteria){
         //TODO implement filterSearch
         return null;
     }
 
     public void addNewProperty(Property property){
-        //TODO implement add Property
+        listing.addProperty(property);
+        notifyObservers(property);
     }
 
     public void modifyListing(int propertyID, Property property){
-        //TODO implement modification
+        //TODO implement safty check to make sure the owner of the property or manage are the only one that can change it
+        listing.modifyProperty(propertyID,property);
+        notifyObservers(property);
     }
 
     public void registerObserver(Observer observer){
@@ -31,13 +57,13 @@ public class RPMS {
         observers.remove(observer);
     }
 
-    public void notifyObservers(){
+    public void notifyObservers(Property property){
         //TODO implement notify Observers
         //if a listing is modifed or a new property is listed notify Observers (renters)
     }
 
     public void removeProperty(int propertyID){
-        //TODO implement remove property
+        listing.removeProperty(propertyID);
     }
 
     public boolean payFee(int paidAmmount, int proprtyToActive){
@@ -46,14 +72,17 @@ public class RPMS {
     }
 
     public int reportNumProperties(){
+        numProperties = listing.getSize();
         return numProperties;
     }
 
     public int reportNumListedProperties(){
+        numListed = listing.getNumActive();
         return numListed;
     }
 
     public int reportNumRented(){
+        numRented = listing.getNumRented();
         return numRented;
     }
 
