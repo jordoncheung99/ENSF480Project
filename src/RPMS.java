@@ -1,4 +1,6 @@
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class RPMS {
     private int periodOfFees;
@@ -16,9 +18,13 @@ public class RPMS {
         System.out.println("num Props: " + rpms.numProperties);
         System.out.println("num Rented: " + rpms.numRented );
         System.out.println("num Listed: " + rpms.numListed);
-        Address address = new Address("street", " Calgary", "AB", "Canada", "T3k9D2", "NW");
-        Property property = new Property(100,200,100,1,2,true,address,"Condo", 123, true, false, false);
-        rpms.modifyListing(123,property);
+        Address address = new Address("street", "Calgary", "AB", "Canada", "T3k9D2", "NW");
+        Property property = new Property(100,200,100,1,2,true,address,"Condo", 123, true, false, false, null,null);
+        rpms.addNewProperty(property);
+        rpms.payFee(200,123);
+        rpms.payFee(200,123);
+        rpms.payFee(200,123);
+        //rpms.modifyListing(123,property);
         rpms.listing.saveDataBase();
     }
 
@@ -67,8 +73,16 @@ public class RPMS {
     }
 
     public boolean payFee(int paidAmmount, int proprtyToActive){
-        //TODO implement payFee
-        return  false;
+        if (paidAmmount != feeAmmount){
+            System.out.println("That is not the right ammount! Pay: " + feeAmmount);
+            return  false;
+        }
+        if(listing.findID(proprtyToActive).datePaid != null){
+            System.out.println("The property has already been paid for!");
+            return  false;
+        }
+        listing.findID(proprtyToActive).datePaid = new Date(Instant.now().getEpochSecond());
+        return  true;
     }
 
     public int reportNumProperties(){

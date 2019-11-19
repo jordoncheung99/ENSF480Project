@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PropertyListing {
     //TODO Update to work with a database
@@ -91,11 +92,24 @@ public class PropertyListing {
                 int numOfBathRoom = Integer.parseInt(parts[4]);
                 boolean furnished = Boolean.parseBoolean(parts[5]);
                 String typeOfProperty = parts[12];
+                System.out.println(parts[5]);
                 int listID = Integer.parseInt(parts[13]);
                 boolean active = Boolean.parseBoolean(parts[14]);
                 boolean rented = Boolean.parseBoolean(parts[15]);
                 boolean suspended = Boolean.parseBoolean(parts[16]);
-                properties.add(new Property(rentAmmount,rentTerm,area,numOfBedRooms,numOfBathRoom,furnished,address,typeOfProperty,listID, active, rented,suspended));
+                long tempRented = Long.parseLong(parts[17]);
+                long tempPaid = Long.parseLong(parts[18]);
+                Date dateRented = null;
+                Date datePaid = null;
+                if (tempRented != 0){
+                    dateRented = new Date(tempRented);
+                }
+
+                if(tempPaid != 0){
+                    dateRented = new Date(tempPaid);
+                }
+
+                properties.add(new Property(rentAmmount,rentTerm,area,numOfBedRooms,numOfBathRoom,furnished,address,typeOfProperty,listID, active, rented,suspended, dateRented, datePaid));
                 //properties.add(new Property(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5], add, parts[6],parts[6],parts[6],parts[6],));
             }
         } catch (FileNotFoundException e) {

@@ -1,3 +1,5 @@
+import java.util.Date;
+
 public class Property {
     private float rentAmmount;
     private float rentTerm;
@@ -11,8 +13,10 @@ public class Property {
     boolean active;
     boolean rented;
     boolean suspended;
+    Date dateRented;
+    Date datePaid;
 
-    Property(float rentAmmount, float rentTerm, float area, int numOfBathRooms, int numOfBedRooms, boolean furnished, Address address, String typeOfProperty, int listID, boolean active, boolean rented, boolean suspended){
+    Property(float rentAmmount, float rentTerm, float area, int numOfBathRooms, int numOfBedRooms, boolean furnished, Address address, String typeOfProperty, int listID, boolean active, boolean rented, boolean suspended, Date dateRented, Date datePaid){
         this.rentAmmount = rentAmmount;
         this.rentTerm = rentTerm;
         this.area = area;
@@ -25,6 +29,8 @@ public class Property {
         this.active = active;
         this.rented = rented;
         this.suspended = suspended;
+        this.dateRented = dateRented;
+        this.datePaid = datePaid;
     }
 
     public float getRentAmmount(){
@@ -74,6 +80,18 @@ public class Property {
     public String toString(){
         String sendBack = rentAmmount + " " + rentTerm + " " + area + " " + numOfBedRooms + " " + numOfBathRooms + " " + furnished;
         sendBack += " " + address.toString() + " " + typeOfProperty + " " + listID  + " " +  active  + " " +  rented + " " + suspended;
+        if(dateRented == null){
+            sendBack += " " + 0;
+        }else{
+            sendBack += " " + dateRented.getTime();
+        }
+
+        if(datePaid == null){
+            sendBack += " " + 0;
+        }else{
+            sendBack += " " + datePaid.getTime();
+        }
+        System.out.println(sendBack);
         return  sendBack;
     }
 
