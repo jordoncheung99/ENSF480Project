@@ -26,7 +26,7 @@ public class LoginServer {
         return instance;
     }
 
-    public void addUser(String username, String password){
+    public void addUser(String username, String password, int type){
         //TODO translate to work with database
 
         //Check if the username exists
@@ -36,20 +36,29 @@ public class LoginServer {
                 return;
             }
         }
-
-
         //TODO: Translate to work with a database.
-        users.add(new User(username, password));
+        users.add(new User(username, password, type));
     }
 
     public User validate(String username, String password){
         //TODO translate so it works with database
         for (User temp: users){
+            //System.out.println("Stored Username: " + temp.username + " length: " + temp.username.length());
+            //System.out.println("Stored password: " + temp.password + " length: " + temp.password.length());
             if(temp.username.equals(username) && temp.password.equals(password)){
                 return temp;
             }
         }
         return null;
+    }
+
+    public boolean exists(String username){
+        for(User temp: users){
+            if(temp.username.equals(username)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void removeUser(String username, String password){
@@ -69,7 +78,7 @@ public class LoginServer {
             String line = null;
             while( (line = in.readLine())!= null){
                 String[] parts = line.split(" ");
-                users.add(new User(parts[0],parts[1]));
+                users.add(new User(parts[0],parts[1], Integer.parseInt(parts[2])));
             }
         } catch (FileNotFoundException e) {
             System.err.println("Text file not found");
@@ -85,7 +94,7 @@ public class LoginServer {
         try {
             PrintWriter writer = new PrintWriter("Users.txt");
             for(User temp: users){
-                writer.println(temp.username + " " + temp.password);
+                writer.println(temp.username + " " + temp.password + " " + temp.type);
             }
             writer.close();
         } catch (FileNotFoundException e) {

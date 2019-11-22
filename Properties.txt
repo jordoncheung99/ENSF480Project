@@ -1,1 +1,1 @@
-100.0 200.0 100.0 1 2 true street Calgary AB Canada T3k9D2 NW Condo 123 true false false 0 1574133886
+100.0 200.0 100.0 1 2 true street Calgary AB Canada T3k9D2 NW Condo 123 true false false 1574197676 1574385556

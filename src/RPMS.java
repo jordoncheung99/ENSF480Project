@@ -10,6 +10,7 @@ public class RPMS {
     private int numListed;
     PropertyListing listing;
     ArrayList<Observer> observers;
+    LoginServer loginServer;
     private Filter filter;
 
 
@@ -37,6 +38,11 @@ public class RPMS {
         numProperties = listing.getSize();
         numRented = listing.getNumRented();
         numListed = listing.getNumActive();
+        loginServer = LoginServer.getInstance();
+    }
+
+    public void login(String username, String password){
+
     }
 
     public PropertyListing filterSearch(Criteria criteria){
