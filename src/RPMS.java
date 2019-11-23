@@ -45,9 +45,31 @@ public class RPMS {
 
     }
 
-    public PropertyListing filterSearch(Criteria criteria){
-        //TODO implement filterSearch
-        return null;
+    public ArrayList<Property> filterSearch(Criteria criteria){
+        ArrayList<Property> temp = listing.getProperties();
+        ArrayList<Property> addTo = new ArrayList<>();
+        int size = temp.size();
+
+        for(int i = 0; i < size; i++){
+            if(criteria.getCityQuadrant().equals(temp.get(i).getAddress().cityQuadrant)){
+                if(criteria.getRentAmmount() == temp.get(i).getRentAmmount()){
+                    if(criteria.getRentTerm() == temp.get(i).getRentTerm()){
+                        if(criteria.getArea() == temp.get(i).getArea()){
+                            if(criteria.getTypeOfProprty().equals(temp.get(i).getTypeOfProperty())){
+                                if(criteria.getNumBedRoom() == temp.get(i).getNumOfBedRooms()){
+                                    if(criteria.getNumBathRooms() == temp.get(i).getNumOfBathRooms()){
+                                        if(criteria.getFurnished() == temp.get(i).getFurnished()){
+                                            addTo.add(temp.get(i));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return addTo;
     }
 
     public void addNewProperty(Property property){
