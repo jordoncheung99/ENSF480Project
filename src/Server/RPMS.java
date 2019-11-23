@@ -1,3 +1,5 @@
+package Server;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,35 +43,9 @@ public class RPMS {
         loginServer = LoginServer.getInstance();
     }
 
-    public void login(String username, String password){
-
-    }
-
-    public ArrayList<Property> filterSearch(Criteria criteria){
-        ArrayList<Property> temp = listing.getProperties();
-        ArrayList<Property> addTo = new ArrayList<>();
-        int size = temp.size();
-
-        for(int i = 0; i < size; i++){
-            if(criteria.getCityQuadrant().equals(temp.get(i).getAddress().cityQuadrant)){
-                if(criteria.getRentAmmount() == temp.get(i).getRentAmmount()){
-                    if(criteria.getRentTerm() == temp.get(i).getRentTerm()){
-                        if(criteria.getArea() == temp.get(i).getArea()){
-                            if(criteria.getTypeOfProprty().equals(temp.get(i).getTypeOfProperty())){
-                                if(criteria.getNumBedRoom() == temp.get(i).getNumOfBedRooms()){
-                                    if(criteria.getNumBathRooms() == temp.get(i).getNumOfBathRooms()){
-                                        if(criteria.getFurnished() == temp.get(i).getFurnished()){
-                                            addTo.add(temp.get(i));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return addTo;
+    public PropertyListing filterSearch(Criteria criteria){
+        //TODO implement filterSearch
+        return null;
     }
 
     public void addNewProperty(Property property){
@@ -105,12 +81,18 @@ public class RPMS {
             System.out.println("That is not the right ammount! Pay: " + feeAmmount);
             return  false;
         }
-        if(listing.findID(proprtyToActive).datePaid != null){
+        Property prop = listing.findID(proprtyToActive);
+        if(prop == null){
+            System.out.println("That property dosen't exist!");
+        }
+
+        if(prop.datePaid != null){
             System.out.println("The property has already been paid for!");
             return  false;
         }
-        listing.findID(proprtyToActive).datePaid = new Date(Instant.now().getEpochSecond());
 
+        prop.datePaid = new Date(Instant.now().getEpochSecond());
+        prop.active = true;
         return  true;
     }
 

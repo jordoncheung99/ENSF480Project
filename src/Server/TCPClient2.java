@@ -1,4 +1,4 @@
-/*
+package Server;/*
  * A simple TCP client that sends messages to a server and display the message
    from the server. 
  * For use in CPSC 441 lectures
@@ -15,7 +15,7 @@ class TCPClient2 {
     { 
         if (args.length != 2)
         {
-            System.out.println("Usage: TCPClient <Server IP> <Server Port>");
+            System.out.println("Usage: TCPClient <Server.Server IP> <Server.Server Port>");
             System.exit(1);
         }
 
@@ -68,7 +68,7 @@ class TCPClient2 {
 				// Getting response from the server
 				while(inBuffer.ready()){
 					line = inBuffer.readLine();
-					System.out.println("Server: " + line);
+					System.out.println("Server.Server: " + line);
 				}
 			}
             System.out.print("Please enter a message to be sent to the server ('logout' to terminate): ");

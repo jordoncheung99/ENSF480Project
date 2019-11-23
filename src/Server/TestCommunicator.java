@@ -1,3 +1,5 @@
+package Server;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,14 +45,8 @@ public class TestCommunicator implements Runnable{
         }
     }
 
-    private void handleRPMS() throws IOException{
-        sendString("Welcome, to this temp echo server");
-        while(true){
-            String input = socketIn.readLine();
-            System.out.println("Echo: " + input);
-            sendString(input);
-        }
-    }
+
+
 
     private void initalizeUser() throws IOException{
         sendString("Please enter 'rent' to start looking at properties");
@@ -81,20 +77,20 @@ public class TestCommunicator implements Runnable{
             String username = socketIn.readLine();
             if(!loginServer.exists(username)){
                 while(true){
-                    sendString("What is your username?");
+                    sendString("What is your password?");
                     String password = socketIn.readLine();
                     while(true){
-                        int accType = -1;
+                        String accType = null;
                         sendString("are you an renter? landlord? or manager?");
                         String type = socketIn.readLine();
                         if (type.equalsIgnoreCase("renter")){
-                            accType = 0;
+                            accType = "RENTER";
                         }else if(type.equalsIgnoreCase("landlord")){
-                            accType = 1;
+                            accType = "LANDLORD";
                         }else if(type.equalsIgnoreCase("manager")){
-                            accType = 2;
+                            accType = "MANAGER";
                         }
-                        if (accType >= 0){
+                        if (accType != null){
                             loginServer.addUser(username,password, accType);
                             client = loginServer.validate(username,password);
                             return;
@@ -125,4 +121,49 @@ public class TestCommunicator implements Runnable{
             }
         }
     }
+
+
+    private void handleRPMS() throws IOException{
+        sendString("Welcome, to this temp echo server");
+        while(true){
+            String input = socketIn.readLine();
+            if(input.equalsIgnoreCase("save")){
+                LoginServer.getInstance().saveDataBase();
+            }else if(input.equalsIgnoreCase("exit")){
+                return;
+            }
+            System.out.println("Echo: " + input);
+            sendString(input);
+        }
+    }
+
+    private void renterHandler(){
+        while(true){
+
+        }
+    }
+
+    private void regRentHandler(){
+        while(true){
+
+        }
+    }
+
+    private void landLordHandler(){
+        while(true){
+
+        }
+    }
+
+    private void managerHandler(){
+        while(true){
+
+        }
+    }
+
+    private void filterSearch(){
+
+    }
+
+
 }
