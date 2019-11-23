@@ -1,3 +1,8 @@
+package Server;
+
+import Server.MySQLDatabase;
+    import Server.User;
+
     import java.io.*;
     import java.sql.Connection;
     import java.sql.ResultSet;
@@ -27,23 +32,29 @@ public class LoginServer {
     }
 
     public void addUser(String username, String password, String type){
-        //TODO translate to work with database
-
-        //Check if the username exists
-        for(User temp: users){
-            if(temp.username.equals(username)){
-                System.out.println("Username already exists, please pick another name");
-                return;
-            }
+//        //TODO translate to work with database
+//
+//        //Check if the username exists
+//        for(User temp: users){
+//            if(temp.username.equals(username)){
+//                System.out.println("Username already exists, please pick another name");
+//                return;
+//            }
+//        }
+//        //TODO: Translate to work with a database.
+//        users.add(new User(username, password, type));
+        try{
+            Connection conn = database.getConnection();
+            Statement addUser = conn.createStatement();
+            String query = "INSERT INTO User VALUES('" + username + "','" + password + "','" + type + "')";
+            addUser.executeQuery(query);
+        }catch(SQLException e){
+            e.printStackTrace();
         }
-        //TODO: Translate to work with a database.
-        users.add(new User(username, password, type));
     }
 
     public User validate(String username, String password){
         try {
-            database = new MySQLDatabase();
-            database.initializeConnection();
             Connection conn = database.getConnection();
             Statement validateUsers = conn.createStatement();
             String query = "SELECT * FROM User WHERE Uname = '" + username + "' AND Pass = '" + password + "'";

@@ -1,9 +1,9 @@
 package Server;
 
 public class User {
-    String username;
-    String password;
-    String type;
+    public String username;
+    public String password;
+    public String type;
     public User(String uname, String pass, String type){
         username = uname;
         password = pass;
