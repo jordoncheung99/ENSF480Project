@@ -43,14 +43,14 @@ public class LoginServer {
 //        }
 //        //TODO: Translate to work with a database.
 //        users.add(new User(username, password, type));
-        try{
-            Connection conn = database.getConnection();
-            Statement addUser = conn.createStatement();
-            String query = "INSERT INTO User VALUES('" + username + "','" + password + "','" + type + "')";
-            addUser.executeQuery(query);
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
+//        try{
+//            Connection conn = database.getConnection();
+//            Statement addUser = conn.createStatement();
+//            String query = "INSERT INTO User VALUES('" + username + "','" + password + "','" + type + "')";
+//            addUser.executeQuery(query);
+//        }catch(SQLException e){
+//            e.printStackTrace();
+//        }
     }
 
     public User validate(String username, String password){
@@ -94,20 +94,6 @@ public class LoginServer {
     public void loadDataBase(){
         database = new MySQLDatabase();
         database.initializeConnection();
-    }
-
-    public void saveDataBase(){
-//        //TODO: Translate to work with database
-//        try {
-//            PrintWriter writer = new PrintWriter("Users.txt");
-//            for(User temp: users){
-//                writer.println(temp.username + " " + temp.password + " " + temp.type);
-//            }
-//            writer.close();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-
     }
 
 }

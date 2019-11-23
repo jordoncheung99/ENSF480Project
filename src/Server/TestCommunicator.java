@@ -127,9 +127,7 @@ public class TestCommunicator implements Runnable{
         sendString("Welcome, to this temp echo server");
         while(true){
             String input = socketIn.readLine();
-            if(input.equalsIgnoreCase("save")){
-                LoginServer.getInstance().saveDataBase();
-            }else if(input.equalsIgnoreCase("exit")){
+            if(input.equalsIgnoreCase("exit")){
                 return;
             }
             System.out.println("Echo: " + input);
