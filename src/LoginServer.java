@@ -1,10 +1,15 @@
     import java.io.*;
-import java.util.ArrayList;
+    import java.sql.Connection;
+    import java.sql.ResultSet;
+    import java.sql.SQLException;
+    import java.sql.Statement;
+    import java.util.ArrayList;
 
 public class LoginServer {
     //TODO translate to work with data bases
     //TODO translate to work over a server (prob routed through RPMS)
     ArrayList<User> users;
+    private MySQLDatabase database;
     private static LoginServer instance;
 
     public static void main(String args[]){
@@ -41,13 +46,23 @@ public class LoginServer {
     }
 
     public User validate(String username, String password){
-        //TODO translate so it works with database
-        for (User temp: users){
-            //System.out.println("Stored Username: " + temp.username + " length: " + temp.username.length());
-            //System.out.println("Stored password: " + temp.password + " length: " + temp.password.length());
-            if(temp.username.equals(username) && temp.password.equals(password)){
+        try {
+            database = new MySQLDatabase();
+            database.initializeConnection();
+            Connection conn = database.getConnection();
+            Statement validateUsers = conn.createStatement();
+            String query = "SELECT * FROM User WHERE Uname = '" + username + "' AND Pass = '" + password + "'";
+            ResultSet resSet = validateUsers.executeQuery(query);
+            if(!resSet.next()){
+                return null;
+            }
+            else{
+                User temp = new User(resSet.getString("Uname"), resSet.getString("Pass"), 1);
                 return temp;
             }
+        }catch(SQLException e){
+            e.printStackTrace();
+            System.err.println("Error - Could not execute query");
         }
         return null;
     }
@@ -71,22 +86,8 @@ public class LoginServer {
     }
 
     public void loadDataBase(){
-        //TODO: Translate to work with databse
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new FileReader("Users.txt"));
-            String line = null;
-            while( (line = in.readLine())!= null){
-                String[] parts = line.split(" ");
-                users.add(new User(parts[0],parts[1], Integer.parseInt(parts[2])));
-            }
-        } catch (FileNotFoundException e) {
-            System.err.println("Text file not found");
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.err.println("Something went wrong while reading the file");
-            e.printStackTrace();
-        }
+        database = new MySQLDatabase();
+        database.initializeConnection();
     }
 
     public void saveDataBase(){

@@ -5,8 +5,9 @@ public class MySQLDatabase implements DatabaseCredentials{
 
     public void initializeConnection(){
         try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-        }catch(SQLException e){
+        }catch(SQLException | ClassNotFoundException e){
             System.err.println("Error - Could not establish database connection");
         }
     }
