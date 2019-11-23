@@ -1,12 +1,14 @@
+package Server;
+
 import java.sql.*;
 
-public class MySQLDatabase implements DatabaseCredentials{
+public class MySQLDatabase implements DatabaseCredentials {
     private Connection conn;
 
     public void initializeConnection(){
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+            conn = DriverManager.getConnection(DatabaseCredentials.DB_URL, DatabaseCredentials.USERNAME, DatabaseCredentials.PASSWORD);
         }catch(SQLException | ClassNotFoundException e){
             System.err.println("Error - Could not establish database connection");
         }

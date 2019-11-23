@@ -1,23 +1,22 @@
-    import java.io.*;
-    import java.sql.Connection;
-    import java.sql.ResultSet;
-    import java.sql.SQLException;
-    import java.sql.Statement;
-    import java.util.ArrayList;
+
+package Server;
+import java.io.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.io.*;
+import java.util.ArrayList;
 
 public class LoginServer {
     //TODO translate to work with data bases
-    //TODO translate to work over a server (prob routed through RPMS)
     ArrayList<User> users;
     private MySQLDatabase database;
     private static LoginServer instance;
 
-    public static void main(String args[]){
-        LoginServer server = getInstance();
-        server.loadDataBase();
-        server.removeUser("Tim","321");
-        server.saveDataBase();
-    }
+
 
     private LoginServer(){
         users = new ArrayList<>();
@@ -31,7 +30,7 @@ public class LoginServer {
         return instance;
     }
 
-    public void addUser(String username, String password, int type){
+    public void addUser(String username, String password, String type){
         //TODO translate to work with database
 
         //Check if the username exists
@@ -57,7 +56,7 @@ public class LoginServer {
                 return null;
             }
             else{
-                User temp = new User(resSet.getString("Uname"), resSet.getString("Pass"), 1);
+                User temp = new User(resSet.getString("Uname"), resSet.getString("Pass"), null);
                 return temp;
             }
         }catch(SQLException e){

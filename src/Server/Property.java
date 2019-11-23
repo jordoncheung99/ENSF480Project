@@ -1,3 +1,5 @@
+package Server;
+
 import java.util.Date;
 
 public class Property {
@@ -75,6 +77,61 @@ public class Property {
 
     public boolean getRented(){
         return rented;
+    }
+
+    Property(String input){
+        String[] parts = input.split("&");
+        rentAmmount = Float.parseFloat(parts[0]);
+        rentTerm = Float.parseFloat(parts[1]);
+        area = Float.parseFloat(parts[2]);
+        numOfBedRooms = Integer.parseInt(parts[3]);
+        numOfBathRooms = Integer.parseInt(parts[4]);
+        furnished = Boolean.parseBoolean(parts[5]);
+        address = new Address(parts[6]);
+        typeOfProperty = parts[7];
+        listID = Integer.parseInt(parts[8]);
+        active = Boolean.parseBoolean(parts[9]);
+        rented = Boolean.parseBoolean(parts[10]);
+        suspended = Boolean.parseBoolean(parts[11]);
+        if (parts[12].equals(0)){
+            dateRented = null;
+        }else{
+            dateRented = new Date(Integer.parseInt(parts[12]));
+        }
+
+        if (parts[13].equals("0")){
+            datePaid = null;
+        }else{
+            datePaid = new Date(Integer.parseInt(parts[13]));
+        }
+    }
+
+    public String toServerString(){
+        String sendBack = "";
+        sendBack += rentAmmount;
+        sendBack += "&" + rentTerm;
+        sendBack += "&" + area;
+        sendBack += "&" + numOfBedRooms;
+        sendBack += "&" + numOfBathRooms;
+        sendBack += "&" + furnished;
+        sendBack += "&" + address.toString();
+        sendBack += "&" + typeOfProperty;
+        sendBack += "&" + listID;
+        sendBack += "&" + active;
+        sendBack += "&" + rented;
+        sendBack += "&" + suspended;
+        if(dateRented == null){
+            sendBack += "&" + 0;
+        }else{
+            sendBack += "&" + dateRented.getTime();
+        }
+
+        if(datePaid == null){
+            sendBack += "&" + 0;
+        }else{
+            sendBack += "&" + datePaid.getTime();
+        }
+        return  sendBack;
     }
 
     public String toString(){
