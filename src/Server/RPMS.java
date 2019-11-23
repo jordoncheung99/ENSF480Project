@@ -1,3 +1,5 @@
+package Server;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,10 +43,6 @@ public class RPMS {
         loginServer = LoginServer.getInstance();
     }
 
-    public void login(String username, String password){
-
-    }
-
     public PropertyListing filterSearch(Criteria criteria){
         //TODO implement filterSearch
         return null;
@@ -83,12 +81,18 @@ public class RPMS {
             System.out.println("That is not the right ammount! Pay: " + feeAmmount);
             return  false;
         }
-        if(listing.findID(proprtyToActive).datePaid != null){
+        Property prop = listing.findID(proprtyToActive);
+        if(prop == null){
+            System.out.println("That property dosen't exist!");
+        }
+
+        if(prop.datePaid != null){
             System.out.println("The property has already been paid for!");
             return  false;
         }
-        listing.findID(proprtyToActive).datePaid = new Date(Instant.now().getEpochSecond());
 
+        prop.datePaid = new Date(Instant.now().getEpochSecond());
+        prop.active = true;
         return  true;
     }
 

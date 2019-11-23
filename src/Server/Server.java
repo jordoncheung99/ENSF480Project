@@ -1,3 +1,5 @@
+package Server;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -43,7 +45,6 @@ class Server implements Runnable{
 	}
 	
 	public static void main(String[] args) throws IOException{
-
 		//MultiTreaded server
 		Server server = new Server(4099);
 		Thread t = new Thread(server);

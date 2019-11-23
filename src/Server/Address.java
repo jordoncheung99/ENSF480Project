@@ -1,3 +1,5 @@
+package Server;
+
 public class Address {
     String street;
     String city;
@@ -13,6 +15,16 @@ public class Address {
         this.country = country;
         this.postalCode = postalCode;
         this.cityQuadrant = cityQuadrant;
+    }
+
+    Address(String s){
+        String[] parts = s.split(" ");
+        street = parts[0];
+        city = parts[1];
+        province = parts[2];
+        country = parts[3];
+        postalCode = parts[4];
+        cityQuadrant = parts[5];
     }
 
     public String toString(){

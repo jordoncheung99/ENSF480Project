@@ -12,11 +12,7 @@ public class LoginServer {
     private MySQLDatabase database;
     private static LoginServer instance;
 
-    public static void main(String args[]){
-        LoginServer server = getInstance();
-        server.loadDataBase();
-        server.saveDataBase();
-    }
+
 
     private LoginServer(){
         users = new ArrayList<>();
@@ -30,30 +26,24 @@ public class LoginServer {
         return instance;
     }
 
-    public void addUser(String username, String password, int type){
-//        //TODO translate to work with database
-//
-//        //Check if the username exists
-//        for(User temp: users){
-//            if(temp.username.equals(username)){
-//                System.out.println("Username already exists, please pick another name");
-//                return;
-//            }
-//        }
-//        //TODO: Translate to work with a database.
-//        users.add(new User(username, password, type));
-//        try{
-//            Connection conn = database.getConnection();
-//            Statement addUser = conn.createStatement();
-//            String query = "INSERT "
-//        }catch(SQLException e)
-//        {
-//            e.printStackTrace();
-//        }
+    public void addUser(String username, String password, String type){
+        //TODO translate to work with database
+
+        //Check if the username exists
+        for(User temp: users){
+            if(temp.username.equals(username)){
+                System.out.println("Username already exists, please pick another name");
+                return;
+            }
+        }
+        //TODO: Translate to work with a database.
+        users.add(new User(username, password, type));
     }
 
     public User validate(String username, String password){
         try {
+            database = new MySQLDatabase();
+            database.initializeConnection();
             Connection conn = database.getConnection();
             Statement validateUsers = conn.createStatement();
             String query = "SELECT * FROM User WHERE Uname = '" + username + "' AND Pass = '" + password + "'";
@@ -62,11 +52,12 @@ public class LoginServer {
                 return null;
             }
             else{
-                User temp = new User(resSet.getString("Uname"), resSet.getString("Pass"), 1);
+                User temp = new User(resSet.getString("Uname"), resSet.getString("Pass"), null);
                 return temp;
             }
         }catch(SQLException e){
             e.printStackTrace();
+            System.err.println("Error - Could not execute query");
         }
         return null;
     }

@@ -1,3 +1,5 @@
+package Server;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -110,7 +112,7 @@ public class PropertyListing {
                 }
 
                 properties.add(new Property(rentAmmount,rentTerm,area,numOfBedRooms,numOfBathRoom,furnished,address,typeOfProperty,listID, active, rented,suspended, dateRented, datePaid));
-                //properties.add(new Property(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5], add, parts[6],parts[6],parts[6],parts[6],));
+                //properties.add(new Server.Property(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5], add, parts[6],parts[6],parts[6],parts[6],));
             }
         } catch (FileNotFoundException e) {
             System.err.println("Text file not found");
