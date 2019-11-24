@@ -55,6 +55,8 @@ public class Property {
         return numOfBathRooms;
     }
 
+    public boolean getFurnished() { return furnished; }
+
     public Address getAddress(){
         return  address;
     }

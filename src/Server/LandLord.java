@@ -9,8 +9,10 @@ import java.util.ArrayList;
 public class LandLord {
     private ArrayList<Property> registeredProperties;
     private MySQLDatabase database;
+    public String username;
 
     public LandLord(MySQLDatabase database, String username){
+        this.username = username;
         this.database = database;
         try {
             Connection conn = database.getConnection();

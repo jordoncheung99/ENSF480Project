@@ -148,20 +148,22 @@ public class TestCommunicator implements Runnable{
     private void handleRPMSRouting() throws IOException{
         MySQLDatabase database = new MySQLDatabase();
         database.initializeConnection();
-        sendString("User has successfully logged in as a " + client.getType());
-        switch(client.getType()) {
-            case "RENTER":
-                regRentHandler(database);
-                break;
-            case "LANDLORD":
-                landLordHandler(database);
-                break;
-            case "MANAGER":
-                managerHandler(database);
-                break;
+        if(client == null) {
+            renterHandler();
+        }else {
+            sendString("User has successfully logged in as a " + client.getType());
+            switch (client.getType()) {
+                case "RENTER":
+                    regRentHandler(database);
+                    break;
+                case "LANDLORD":
+                    landLordHandler(database);
+                    break;
+                case "MANAGER":
+                    managerHandler(database);
+                    break;
+            }
         }
-    }
-
         while (true){
             String input = socketIn.readLine();
             for (int i = 0; i < validCommands.size(); i++){
@@ -170,7 +172,6 @@ public class TestCommunicator implements Runnable{
                 }
             }
         }
-
     }
 
     private void renterHandler(){
@@ -178,17 +179,16 @@ public class TestCommunicator implements Runnable{
         validCommands.add(new EmailHandler(socketIn,socketOut));
     }
 
-    private void regRentHandler(){
+    private void regRentHandler(MySQLDatabase database){
         validCommands.add(new SearchHandler(socketIn,socketOut));
         validCommands.add(new EmailHandler(socketIn,socketOut));
     }
 
-    private void landLordHandler(){
+    private void landLordHandler(MySQLDatabase database) throws IOException {
         validCommands.add(new ModifyHandler(socketIn,socketOut));
         validCommands.add(new FeeHandler(socketIn,socketOut));
         validCommands.add(new AddHandler(socketIn,socketOut));
         validCommands.add(new SearchHandler(socketIn,socketOut));
-    private void landLordHandler(MySQLDatabase database) throws IOException {
         LandLord user = new LandLord(database, client.username);
         while(true){
             sendString("Enter 'register' to register a property");
@@ -214,7 +214,7 @@ public class TestCommunicator implements Runnable{
         }
     }
 
-    private void managerHandler(){
+    private void managerHandler(MySQLDatabase database){
         validCommands.add(new ModifyHandler(socketIn,socketOut));
         validCommands.add(new SearchHandler(socketIn,socketOut));
         validCommands.add(new ViewPeopleHandler(socketIn,socketOut));
