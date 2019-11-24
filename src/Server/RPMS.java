@@ -1,5 +1,9 @@
 package Server;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +13,7 @@ public class RPMS {
     private float feeAmmount;
     private int numProperties;
     private int numListed;
+    private MySQLDatabase database;
     PropertyListing listing;
     ArrayList<Observer> observers;
     LoginServer loginServer;
@@ -21,7 +26,7 @@ public class RPMS {
         System.out.println("num Listed: " + rpms.numListed);
         Address address = new Address("street", "Calgary", "AB", "Canada", "T3k9D2");
         Property property = new Property(100,200,100,1,2,true,address,"Condo", 123, true, false, false, null,null);
-        rpms.addNewProperty(property);
+        rpms.addNewProperty(property, "bla");
         rpms.payFee(200,123);
         rpms.payFee(200,123);
         rpms.payFee(200,123);
@@ -30,6 +35,8 @@ public class RPMS {
     }
 
     RPMS(){
+        database = new MySQLDatabase();
+        database.initializeConnection();
         observers = new ArrayList<>();
         listing = new PropertyListing();
         listing.loadDataBase();
@@ -45,9 +52,30 @@ public class RPMS {
         return filter.Filter(listing,criteria);
     }
 
-    public void addNewProperty(Property property){
-        listing.addProperty(property);
-        notifyObservers(property);
+    public void addNewProperty(Property property, String username) {
+        try {
+            listing.addProperty(property);
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("INSERT INTO Property VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            state.setString(1, username);
+            state.setFloat(2, property.getArea());
+            state.setFloat(3, property.getRentAmmount());
+            state.setFloat(4, property.getRentTerm());
+            state.setInt(5, property.getNumOfBedRooms());
+            state.setInt(6, property.getNumOfBathRooms());
+            state.setString(7, property.getAddress().getPostalCode());
+            state.setString(8, property.getTypeOfProperty());
+            state.setBoolean(9, property.getActive());
+            state.setBoolean(10, property.getRented());
+            state.setBoolean(11, property.getSuspended());
+            state.setDate(12, new java.sql.Date(property.getDateRented().getTime()));
+            state.setDate(13, new java.sql.Date(property.getDatePaid().getTime()));
+            state.setBoolean(14, property.getFurnished());
+            state.executeUpdate();
+            notifyObservers(property);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
     public void modifyListing(int propertyID, Property property){

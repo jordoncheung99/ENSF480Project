@@ -33,12 +33,6 @@ public class LandLord {
                         resSet.getBoolean("active"), resSet.getBoolean("rented"), resSet.getBoolean("Suspended"),
                         resSet.getDate("dateRented"), resSet.getDate("datePaid")
                         ));
-//                registeredProperties.add(new Property(1, 1, 1,
-//                        1, 1, true,
-//                        address, "hello", 1,
-//                        true, true, resSet.getBoolean("Suspended"),
-//                        resSet.getDate("dateRented"), resSet.getDate("datePaid")
-//                ));
             }
         }catch(SQLException e){
             e.printStackTrace();

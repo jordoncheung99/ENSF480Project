@@ -1,6 +1,8 @@
 package GUI;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class LandlordGUI {
     private JPanel panel1;
@@ -10,4 +12,13 @@ public class LandlordGUI {
     private JButton registerPropertyButton;
     private JButton viewRegisteredProperties;
     private JButton logoffButton;
+
+    public LandlordGUI() {
+        viewRegisteredProperties.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+            }
+        });
+    }
 }

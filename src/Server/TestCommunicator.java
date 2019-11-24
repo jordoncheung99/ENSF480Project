@@ -167,7 +167,7 @@ public class TestCommunicator implements Runnable{
         while (true){
             String input = socketIn.readLine();
             for (int i = 0; i < validCommands.size(); i++){
-                if (validCommands.get(i).doTask(input,rpms)){
+                if (validCommands.get(i).doTask(input,rpms,"")){
                     break;
                 }
             }
@@ -191,14 +191,12 @@ public class TestCommunicator implements Runnable{
         validCommands.add(new SearchHandler(socketIn,socketOut));
         LandLord user = new LandLord(database, client.username);
         while(true){
-            sendString("Enter 'register' to register a property");
-            sendString("OR Enter 'view' to view registered properties");
+            sendString("Enter 'ADD' to register a property");
+            sendString("Enter 'MODIFY' to change a property");
+            sendString("OR Enter 'VIEW' to view all registered properties");
             while(true) {
                 String input = socketIn.readLine();
-                if (input.equalsIgnoreCase("register")) {
-
-                }
-                else if (input.equalsIgnoreCase("view")) {
+                if (input.equalsIgnoreCase("view")) {
                     ArrayList<Property> properties;
                     properties = user.getRegisteredProperties();
                     if(properties.size() == 0) {
@@ -210,8 +208,10 @@ public class TestCommunicator implements Runnable{
                         }
                     }
                 }
-                else{
-                    sendString("Not a valid command");
+                for (int i = 0; i < validCommands.size(); i++){
+                    if (validCommands.get(i).doTask(input,rpms,client.username)){
+                        break;
+                    }
                 }
             }
         }

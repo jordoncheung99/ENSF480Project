@@ -77,6 +77,12 @@ public class Property {
         return rented;
     }
 
+    public boolean getSuspended() { return suspended; }
+
+    public Date getDateRented() { return dateRented; }
+
+    public Date getDatePaid() { return datePaid; }
+
     Property(String input){
         String[] parts = input.split("&");
         rentAmmount = Float.parseFloat(parts[0]);
@@ -133,8 +139,8 @@ public class Property {
     }
 
     public String toString(){
-        String sendBack = rentAmmount + " " + rentTerm + " " + area + " " + numOfBedRooms + " " + numOfBathRooms + " " + furnished;
-        sendBack += " " + address.toString() + " " + typeOfProperty + " " + listID  + " " +  active  + " " +  rented + " " + suspended;
+        String sendBack = "Property ID: " + listID + " Rent Amount: " + rentAmmount + " Rent Term: " + rentTerm + " Area: " + area + " Bedrooms: " + numOfBedRooms + " Bathrooms: " + numOfBathRooms + " Furnished: " + furnished;
+        sendBack += " Address: " + address.toString() + " Type: " + typeOfProperty + " Is Active: " +  active  + " Is Rented: " +  rented + " Is Suspended: " + suspended;
         if(dateRented == null){
             sendBack += " " + 0;
         }else{

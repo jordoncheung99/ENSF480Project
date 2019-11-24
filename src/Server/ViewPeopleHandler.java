@@ -9,7 +9,7 @@ public class ViewPeopleHandler extends Handler {
     }
 
     @Override
-    public boolean doTask(String input, RPMS rpms) {
+    public boolean doTask(String input, RPMS rpms, String username) {
         sendString("NEEDED TO BE IMPLMENTED");
         return false;
     }
