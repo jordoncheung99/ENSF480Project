@@ -28,23 +28,30 @@ public class LoginServer {
         return instance;
     }
 
-    public void addUser(String username, String password, String type, Name name){
+    public void addUser(String username, String password, String type, Name name, Address address){
         //TODO Pass in address and name objects
         try {
-            Connection conn = database.getConnection();
-            /*
-            PreparedStatement addAddress = conn.prepareStatement("INSERT INTO address VALUES(?, ?, ?, ?, ?)");
-            addAddress.setString(1, address.postalCode);
-            addAddress.setString(2, address.country);
-            addAddress.setString(3, address.province);
-            addAddress.setString(4, address.city);
-            addAddress.setString(5, address.street);
-            */
+            if(!exists(username)) {
+                Connection conn = database.getConnection();
 
-            PreparedStatement addUser = conn.prepareStatement("INSERT INTO User VALUES(?, ?, ?)");
-            addUser.setString(1, username);
-            addUser.setString(2, password);
-            addUser.setString(3, type);
+                PreparedStatement addAddress = conn.prepareStatement("INSERT INTO address VALUES(?, ?, ?, ?, ?)");
+                addAddress.setString(1, address.postalCode);
+                addAddress.setString(2, address.country);
+                addAddress.setString(3, address.province);
+                addAddress.setString(4, address.city);
+                addAddress.setString(5, address.street);
+
+                PreparedStatement addPerson = conn.prepareStatement("INSERT INTO person VALUES(?, ?, ?, ?, ?, ?");
+                addPerson.setString(1, name.first);
+                addPerson.setString(2, name.last);
+                addPerson.setString(3, type);
+                addPerson.setString(4, address.postalCode);
+                addPerson.setString(5, username);
+                addPerson.setString(6, password);
+            }
+            else{
+                System.out.println("Username already exists");
+            }
 
         }catch(SQLException e){
             e.printStackTrace();
@@ -54,7 +61,7 @@ public class LoginServer {
     public User validate(String username, String password){
         try {
             Connection conn = database.getConnection();
-            PreparedStatement validateUsers = conn.prepareStatement("SELECT * FROM User WHERE Uname = ? AND Pass = ?");
+            PreparedStatement validateUsers = conn.prepareStatement("SELECT * FROM Person WHERE Uname = ? AND Pass = ?");
             validateUsers.setString(1, username);
             validateUsers.setString(2, password);
             ResultSet resSet = validateUsers.executeQuery();
@@ -72,12 +79,19 @@ public class LoginServer {
     }
 
     public boolean exists(String username){
-        for(User temp: users){
-            if(temp.username.equals(username)){
+        try {
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("SELECT * FROM Person WHERE Uname = ?");
+            state.setString(1, username);
+            ResultSet resSet = state.executeQuery();
+            if(resSet.next()) {
                 return true;
             }
+            return false;
+        }catch(SQLException e){
+            e.printStackTrace();
         }
-        return false;
+        return true;
     }
 
     public void removeUser(String username, String password){
