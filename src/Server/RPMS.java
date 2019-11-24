@@ -21,7 +21,7 @@ public class RPMS {
         System.out.println("num Props: " + rpms.numProperties);
         System.out.println("num Rented: " + rpms.numRented );
         System.out.println("num Listed: " + rpms.numListed);
-        Address address = new Address("street", "Calgary", "AB", "Canada", "T3k9D2", "NW");
+        Address address = new Address("street", "Calgary", "AB", "Canada", "T3k9D2");
         Property property = new Property(100,200,100,1,2,true,address,"Condo", 123, true, false, false, null,null);
         rpms.addNewProperty(property);
         rpms.payFee(200,123);

@@ -86,7 +86,7 @@ public class PropertyListing {
             String line = null;
             while( (line = in.readLine())!= null){
                 String[] parts = line.split(" ");
-                Address address = new Address(parts[6],parts[7],parts[8],parts[9],parts[10],parts[11]);
+                Address address = new Address(parts[6],parts[7],parts[8],parts[9],parts[10]);
                 float rentAmmount = Float.parseFloat(parts[0]);
                 float rentTerm = Float.parseFloat(parts[1]);
                 float area = Float.parseFloat(parts[2]);

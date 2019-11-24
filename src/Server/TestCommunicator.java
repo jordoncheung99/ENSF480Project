@@ -39,7 +39,7 @@ public class TestCommunicator implements Runnable{
             exit(1);
         }
         try {
-            handleRPMS();
+            handleRPMSRouting();
         }catch (IOException e){
             System.out.println(e.getMessage());
         }
@@ -81,7 +81,7 @@ public class TestCommunicator implements Runnable{
                     String password = socketIn.readLine();
                     while(true){
                         String accType = null;
-                        sendString("are you an renter? landlord? or manager?");
+                        sendString("Are you an renter? landlord? or manager?");
                         String type = socketIn.readLine();
                         if (type.equalsIgnoreCase("renter")){
                             accType = "RENTER";
@@ -90,8 +90,24 @@ public class TestCommunicator implements Runnable{
                         }else if(type.equalsIgnoreCase("manager")){
                             accType = "MANAGER";
                         }
+                        sendString("What is your first name?");
+                        String fname = socketIn.readLine();
+                        sendString("What is your last name?");
+                        String lname = socketIn.readLine();
+                        Name name = new Name(fname, lname);
+                        sendString("Country?");
+                        String country = socketIn.readLine();
+                        sendString("Province?");
+                        String province = socketIn.readLine();
+                        sendString("City?");
+                        String city = socketIn.readLine();
+                        sendString("Street?");
+                        String street = socketIn.readLine();
+                        sendString("Postal Code?");
+                        String postal = socketIn.readLine();
+                        Address address = new Address(street, city, province, country, postal);
                         if (accType != null){
-                            loginServer.addUser(username,password, accType);
+                            loginServer.addUser(username,password, accType, name, address);
                             client = loginServer.validate(username,password);
                             return;
                         }
@@ -123,15 +139,18 @@ public class TestCommunicator implements Runnable{
     }
 
 
-    private void handleRPMS() throws IOException{
-        sendString("Welcome, to this temp echo server");
-        while(true){
-            String input = socketIn.readLine();
-            if(input.equalsIgnoreCase("exit")){
-                return;
-            }
-            System.out.println("Echo: " + input);
-            sendString(input);
+    private void handleRPMSRouting() throws IOException{
+        sendString("User has successfully logged in as a " + client.getType());
+        switch(client.getType()) {
+            case "RENTER":
+                regRentHandler();
+                break;
+            case "LANDLORD":
+                landLordHandler();
+                break;
+            case "MANAGER":
+                managerHandler();
+                break;
         }
     }
 
@@ -143,19 +162,19 @@ public class TestCommunicator implements Runnable{
 
     private void regRentHandler(){
         while(true){
-
+            Renter user = new Renter();
         }
     }
 
     private void landLordHandler(){
         while(true){
-
+            LandLord user = new LandLord();
         }
     }
 
     private void managerHandler(){
         while(true){
-
+            Manager user = new Manager();
         }
     }
 

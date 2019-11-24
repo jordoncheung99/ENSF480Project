@@ -31,7 +31,7 @@ public class Criteria {
     Criteria(String input){
         String[] parts = input.split("&");
         for(int i = 0; i < parts.length; i++){
-            System.out.println("i: " + parts[i]);
+            System.out.println(i + ": " + parts[i]);
         }
         furnishedEnable = Boolean.parseBoolean(parts[0]);
         furnished = Boolean.parseBoolean(parts[1]);
