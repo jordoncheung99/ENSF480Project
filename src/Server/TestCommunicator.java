@@ -15,6 +15,9 @@ public class TestCommunicator implements Runnable{
     protected BufferedReader socketIn;
     protected PrintWriter socketOut;
     protected User client;
+    protected ArrayList<Handler> validCommands;
+    protected RPMS rpms;
+
     TestCommunicator(Socket client){
         aSocket = client;
         try {
@@ -23,6 +26,8 @@ public class TestCommunicator implements Runnable{
         }catch(IOException e) {
             e.printStackTrace();
         }
+        validCommands = new ArrayList<Handler>();
+        rpms = new RPMS();
     }
 
     public void sendString(String message) {
@@ -157,18 +162,32 @@ public class TestCommunicator implements Runnable{
         }
     }
 
+        while (true){
+            String input = socketIn.readLine();
+            for (int i = 0; i < validCommands.size(); i++){
+                if (validCommands.get(i).doTask(input,rpms)){
+                    break;
+                }
+            }
+        }
+
+    }
+
     private void renterHandler(){
-        while(true){
-
-        }
+        validCommands.add(new SearchHandler(socketIn,socketOut));
+        validCommands.add(new EmailHandler(socketIn,socketOut));
     }
 
-    private void regRentHandler(MySQLDatabase database){
-        while(true){
-            Renter user = new Renter();
-        }
+    private void regRentHandler(){
+        validCommands.add(new SearchHandler(socketIn,socketOut));
+        validCommands.add(new EmailHandler(socketIn,socketOut));
     }
 
+    private void landLordHandler(){
+        validCommands.add(new ModifyHandler(socketIn,socketOut));
+        validCommands.add(new FeeHandler(socketIn,socketOut));
+        validCommands.add(new AddHandler(socketIn,socketOut));
+        validCommands.add(new SearchHandler(socketIn,socketOut));
     private void landLordHandler(MySQLDatabase database) throws IOException {
         LandLord user = new LandLord(database, client.username);
         while(true){
@@ -195,14 +214,12 @@ public class TestCommunicator implements Runnable{
         }
     }
 
-    private void managerHandler(MySQLDatabase database){
-        while(true){
-            Manager user = new Manager();
-        }
-    }
-
-    private void filterSearch(){
-
+    private void managerHandler(){
+        validCommands.add(new ModifyHandler(socketIn,socketOut));
+        validCommands.add(new SearchHandler(socketIn,socketOut));
+        validCommands.add(new ViewPeopleHandler(socketIn,socketOut));
+        validCommands.add(new ReportHandler(socketIn,socketOut));
+        validCommands.add(new ChangeFeeHandler(socketIn,socketOut));
     }
 
 

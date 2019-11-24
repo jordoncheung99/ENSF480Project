@@ -8,7 +8,6 @@ public class RPMS {
     private int periodOfFees;
     private float feeAmmount;
     private int numProperties;
-    private int numRented;
     private int numListed;
     PropertyListing listing;
     ArrayList<Observer> observers;
@@ -19,7 +18,6 @@ public class RPMS {
     public  static  void main(String args[]){
         RPMS rpms = new RPMS();
         System.out.println("num Props: " + rpms.numProperties);
-        System.out.println("num Rented: " + rpms.numRented );
         System.out.println("num Listed: " + rpms.numListed);
         Address address = new Address("street", "Calgary", "AB", "Canada", "T3k9D2");
         Property property = new Property(100,200,100,1,2,true,address,"Condo", 123, true, false, false, null,null);
@@ -38,14 +36,13 @@ public class RPMS {
         periodOfFees = 100;
         feeAmmount = 200;
         numProperties = listing.getSize();
-        numRented = listing.getNumRented();
         numListed = listing.getNumActive();
         loginServer = LoginServer.getInstance();
+        filter = new BureFroceFilter();
     }
 
     public ArrayList<Property> filterSearch(ArrayList<Criteria> criteria){
-        //TODO implement filterSearch
-        return null;
+        return filter.Filter(listing,criteria);
     }
 
     public void addNewProperty(Property property){
@@ -107,9 +104,35 @@ public class RPMS {
         return numListed;
     }
 
-    public int reportNumRented(){
-        numRented = listing.getNumRented();
-        return numRented;
+    public ArrayList<String> reportNumRented(Date start, Date end){
+
+        ArrayList<String> send = new ArrayList<>();
+        int count = 0;
+        send.add(Integer.toString(count));
+        ArrayList<Property> properties = listing.getProperties();
+        ArrayList<LandLord> landLords = viewLandLords();
+        for (Property prop: properties){
+            if (prop.dateRented.getTime() > start.getTime() && prop.dateRented.getTime() < end.getTime()){
+                count++;
+                //Find land lord who owns the prop
+                String line = "";
+                for (LandLord lord: landLords){
+                    for (Integer id: lord.ownedIDs){
+                        if (id == prop.getListID()){
+                            line += lord.username;
+                        }
+                    }
+                }
+                if (line.length() == 0){
+                    line+= "N/A";
+                }
+                line += prop.getListID();
+                line += prop.getAddress().toString();
+                send.add(line);
+            }
+        }
+        send.set(0,Integer.toString(count));
+        return  send;
     }
 
     public ArrayList<LandLord>  viewLandLords(){
@@ -132,6 +155,15 @@ public class RPMS {
 
         //TODO implement emailing system, Guess it can be a string just print to terminal
         return "Email Sent";
+    }
+
+
+    public void setPeriodOfFees(int newPeriod){
+        periodOfFees = newPeriod;
+    }
+
+    public void setFeeAmmount (float newFee){
+        feeAmmount = newFee;
     }
 
 
