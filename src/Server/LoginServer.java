@@ -71,7 +71,7 @@ public class LoginServer {
                 return null;
             }
             else{
-                User temp = new User(resSet.getString("Uname"), resSet.getString("Pass"), null);
+                User temp = new User(resSet.getString("Uname"), resSet.getString("Pass"), resSet.getString("PersonRole"));
                 return temp;
             }
         }catch(SQLException e){

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import static java.lang.System.exit;
 import static java.lang.System.in;
@@ -140,16 +141,18 @@ public class TestCommunicator implements Runnable{
 
 
     private void handleRPMSRouting() throws IOException{
+        MySQLDatabase database = new MySQLDatabase();
+        database.initializeConnection();
         sendString("User has successfully logged in as a " + client.getType());
         switch(client.getType()) {
             case "RENTER":
-                regRentHandler();
+                regRentHandler(database);
                 break;
             case "LANDLORD":
-                landLordHandler();
+                landLordHandler(database);
                 break;
             case "MANAGER":
-                managerHandler();
+                managerHandler(database);
                 break;
         }
     }
@@ -160,19 +163,39 @@ public class TestCommunicator implements Runnable{
         }
     }
 
-    private void regRentHandler(){
+    private void regRentHandler(MySQLDatabase database){
         while(true){
             Renter user = new Renter();
         }
     }
 
-    private void landLordHandler(){
+    private void landLordHandler(MySQLDatabase database) throws IOException {
+        LandLord user = new LandLord(database, client.username);
         while(true){
-            LandLord user = new LandLord();
+            sendString("Enter 'register' to register a property");
+            sendString("OR Enter 'view' to view registered properties");
+            while(true) {
+                String input = socketIn.readLine();
+                if (input.equalsIgnoreCase("register")) {
+                    //TODO deal with register property
+                }
+                else if (input.equalsIgnoreCase("view")) {
+                    ArrayList<Property> properties;
+                    properties = user.getRegisteredProperties();
+                    if(properties.size() == 0) {
+                        sendString("No registered properties");
+                    }
+                    else {
+                        for (Property property : properties) {
+                            sendString(property.toString());
+                        }
+                    }
+                }
+            }
         }
     }
 
-    private void managerHandler(){
+    private void managerHandler(MySQLDatabase database){
         while(true){
             Manager user = new Manager();
         }
