@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import static java.lang.System.exit;
 import static java.lang.System.in;
@@ -14,6 +15,9 @@ public class TestCommunicator implements Runnable{
     protected BufferedReader socketIn;
     protected PrintWriter socketOut;
     protected User client;
+    protected ArrayList<Handler> validCommands;
+    protected RPMS rpms;
+
     TestCommunicator(Socket client){
         aSocket = client;
         try {
@@ -22,6 +26,8 @@ public class TestCommunicator implements Runnable{
         }catch(IOException e) {
             e.printStackTrace();
         }
+        validCommands = new ArrayList<Handler>();
+        rpms = new RPMS();
     }
 
     public void sendString(String message) {
@@ -140,46 +146,57 @@ public class TestCommunicator implements Runnable{
 
 
     private void handleRPMSRouting() throws IOException{
-        sendString("User has successfully logged in as a " + client.getType());
-        switch(client.getType()) {
-            case "RENTER":
-                regRentHandler();
-                break;
-            case "LANDLORD":
-                landLordHandler();
-                break;
-            case "MANAGER":
-                managerHandler();
-                break;
+        if (client == null){
+             renterHandler();
+        }else{
+            sendString("User has successfully logged in as a " + client.getType());
+            switch(client.getType()) {
+                case "RENTER":
+                    regRentHandler();
+                    break;
+                case "LANDLORD":
+                    landLordHandler();
+                    break;
+                case "MANAGER":
+                    managerHandler();
+                    break;
+            }
         }
+
+        while (true){
+            String input = socketIn.readLine();
+            for (int i = 0; i < validCommands.size(); i++){
+                if (validCommands.get(i).doTask(input,rpms)){
+                    break;
+                }
+            }
+        }
+
     }
 
     private void renterHandler(){
-        while(true){
-
-        }
+        validCommands.add(new SearchHandler(socketIn,socketOut));
+        validCommands.add(new EmailHandler(socketIn,socketOut));
     }
 
     private void regRentHandler(){
-        while(true){
-            Renter user = new Renter();
-        }
+        validCommands.add(new SearchHandler(socketIn,socketOut));
+        validCommands.add(new EmailHandler(socketIn,socketOut));
     }
 
     private void landLordHandler(){
-        while(true){
-            LandLord user = new LandLord();
-        }
+        validCommands.add(new ModifyHandler(socketIn,socketOut));
+        validCommands.add(new FeeHandler(socketIn,socketOut));
+        validCommands.add(new AddHandler(socketIn,socketOut));
+        validCommands.add(new SearchHandler(socketIn,socketOut));
     }
 
     private void managerHandler(){
-        while(true){
-            Manager user = new Manager();
-        }
-    }
-
-    private void filterSearch(){
-
+        validCommands.add(new ModifyHandler(socketIn,socketOut));
+        validCommands.add(new SearchHandler(socketIn,socketOut));
+        validCommands.add(new ViewPeopleHandler(socketIn,socketOut));
+        validCommands.add(new ReportHandler(socketIn,socketOut));
+        validCommands.add(new ChangeFeeHandler(socketIn,socketOut));
     }
 
 

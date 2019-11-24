@@ -16,15 +16,6 @@ public class PropertyListing {
         return properties.size();
     }
 
-    public int getNumRented(){
-        int count = 0;
-        for (Property prop: properties){
-            if (prop.rented){
-                count++;
-            }
-        }
-        return  count;
-    }
 
     public  int getNumActive(){
         int count = 0;
