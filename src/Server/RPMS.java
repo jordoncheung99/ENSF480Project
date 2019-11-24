@@ -43,7 +43,7 @@ public class RPMS {
         loginServer = LoginServer.getInstance();
     }
 
-    public PropertyListing filterSearch(Criteria criteria){
+    public ArrayList<Property> filterSearch(ArrayList<Criteria> criteria){
         //TODO implement filterSearch
         return null;
     }
@@ -76,24 +76,25 @@ public class RPMS {
         listing.removeProperty(propertyID);
     }
 
-    public boolean payFee(int paidAmmount, int proprtyToActive){
+    public String payFee(float paidAmmount, int proprtyToActive){
         if (paidAmmount != feeAmmount){
-            System.out.println("That is not the right ammount! Pay: " + feeAmmount);
-            return  false;
+            //System.out.println("That is not the right ammount! Pay: " + feeAmmount);
+            return  "That is not the right ammount! Pay: " + feeAmmount;
         }
         Property prop = listing.findID(proprtyToActive);
         if(prop == null){
-            System.out.println("That property dosen't exist!");
+            //System.out.println("That property dosen't exist!");
+            return "That property dosen't exist!";
         }
 
         if(prop.datePaid != null){
-            System.out.println("The property has already been paid for!");
-            return  false;
+//            System.out.println("The property has already been paid for!");
+            return  "The property has already been paid for!";
         }
 
         prop.datePaid = new Date(Instant.now().getEpochSecond());
         prop.active = true;
-        return  true;
+        return "property activated!";
     }
 
     public int reportNumProperties(){
@@ -119,6 +120,18 @@ public class RPMS {
     public ArrayList<Renter> viewRenters(){
         //TODO implement viewRenters
         return null;
+    }
+
+    /**
+     *
+     * @param propID property id itself
+     * @param message the email body
+     * @return success/error message
+     */
+    public String email(int propID, String message){
+
+        //TODO implement emailing system, Guess it can be a string just print to terminal
+        return "Email Sent";
     }
 
 

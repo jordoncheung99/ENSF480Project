@@ -107,4 +107,45 @@ public class Criteria {
         }
         return sendback;
     }
+
+
+    public boolean getFurnishedEnable(){
+        return furnishedEnable;
+    }
+
+    public boolean getFurnished(){
+        return furnished;
+    }
+
+    public int getNumBathRooms(){
+        return  numBathRooms;
+    }
+
+    public int getNumBedRoom(){
+        return numBedRoom;
+    }
+
+    public  String[] getTypeOfProprty(){
+        return typeOfProprty;
+    }
+
+    public float getArea(){
+        return area;
+    }
+
+    public float getRentTerm(){
+        return  rentTerm;
+    }
+
+    public float getRentAmmount(){
+        return rentAmmount;
+    }
+
+    public String[] getCityQuadrant(){
+        return cityQuadrant;
+    }
+
+    public int[] getPropertyIDs(){
+        return propertyIDs;
+    }
 }

@@ -1,5 +1,7 @@
 package Server;
 
+import java.util.ArrayList;
+
 public interface Filter {
-    void Filter (PropertyListing properties, Criteria criteria);
+    ArrayList<Property> Filter (PropertyListing properties,  ArrayList<Criteria> criteria);
 }
