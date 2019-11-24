@@ -105,34 +105,35 @@ public class RPMS {
     }
 
     public ArrayList<String> reportNumRented(Date start, Date end){
-
-        ArrayList<String> send = new ArrayList<>();
-        int count = 0;
-        send.add(Integer.toString(count));
-        ArrayList<Property> properties = listing.getProperties();
-        ArrayList<LandLord> landLords = viewLandLords();
-        for (Property prop: properties){
-            if (prop.dateRented.getTime() > start.getTime() && prop.dateRented.getTime() < end.getTime()){
-                count++;
-                //Find land lord who owns the prop
-                String line = "";
-                for (LandLord lord: landLords){
-                    for (Integer id: lord.ownedIDs){
-                        if (id == prop.getListID()){
-                            line += lord.username;
-                        }
-                    }
-                }
-                if (line.length() == 0){
-                    line+= "N/A";
-                }
-                line += prop.getListID();
-                line += prop.getAddress().toString();
-                send.add(line);
-            }
-        }
-        send.set(0,Integer.toString(count));
-        return  send;
+//
+//        ArrayList<String> send = new ArrayList<>();
+//        int count = 0;
+//        send.add(Integer.toString(count));
+//        ArrayList<Property> properties = listing.getProperties();
+//        ArrayList<LandLord> landLords = viewLandLords();
+//        for (Property prop: properties){
+//            if (prop.dateRented.getTime() > start.getTime() && prop.dateRented.getTime() < end.getTime()){
+//                count++;
+//                //Find land lord who owns the prop
+//                String line = "";
+//                for (LandLord lord: landLords){
+//                    for (Integer id: lord.ownedIDs){
+//                        if (id == prop.getListID()){
+//                            line += lord.username;
+//                        }
+//                    }
+//                }
+//                if (line.length() == 0){
+//                    line+= "N/A";
+//                }
+//                line += prop.getListID();
+//                line += prop.getAddress().toString();
+//                send.add(line);
+//            }
+//        }
+//        send.set(0,Integer.toString(count));
+//        return  send;
+        return null;
     }
 
     public ArrayList<LandLord>  viewLandLords(){

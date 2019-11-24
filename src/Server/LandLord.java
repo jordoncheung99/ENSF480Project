@@ -12,6 +12,7 @@ public class LandLord {
     public String username;
 
     public LandLord(MySQLDatabase database, String username){
+        registeredProperties = new ArrayList<Property>();
         this.username = username;
         this.database = database;
         try {
@@ -24,7 +25,6 @@ public class LandLord {
                 state = conn.prepareStatement("SELECT * FROM Address WHERE PostalCode = ?");
                 state.setString(1, resSet.getString("address"));
                 ResultSet addressSet = state.executeQuery();
-                //TODO more protection
                 addressSet.next();
                 Address address = new Address(addressSet.getString("Street"), addressSet.getString("City"), addressSet.getString("Province"), addressSet.getString("Country"), addressSet.getString("PostalCode"));
                 registeredProperties.add(new Property(resSet.getFloat("rentAmount"), resSet.getFloat("rentTerm"), resSet.getFloat("area"),
@@ -33,6 +33,12 @@ public class LandLord {
                         resSet.getBoolean("active"), resSet.getBoolean("rented"), resSet.getBoolean("Suspended"),
                         resSet.getDate("dateRented"), resSet.getDate("datePaid")
                         ));
+//                registeredProperties.add(new Property(1, 1, 1,
+//                        1, 1, true,
+//                        address, "hello", 1,
+//                        true, true, resSet.getBoolean("Suspended"),
+//                        resSet.getDate("dateRented"), resSet.getDate("datePaid")
+//                ));
             }
         }catch(SQLException e){
             e.printStackTrace();

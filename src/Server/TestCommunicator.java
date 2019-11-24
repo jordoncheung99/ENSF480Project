@@ -196,7 +196,7 @@ public class TestCommunicator implements Runnable{
             while(true) {
                 String input = socketIn.readLine();
                 if (input.equalsIgnoreCase("register")) {
-                    //TODO deal with register property
+
                 }
                 else if (input.equalsIgnoreCase("view")) {
                     ArrayList<Property> properties;
@@ -209,6 +209,9 @@ public class TestCommunicator implements Runnable{
                             sendString(property.toString());
                         }
                     }
+                }
+                else{
+                    sendString("Not a valid command");
                 }
             }
         }
