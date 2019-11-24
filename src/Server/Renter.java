@@ -1,5 +1,5 @@
 package Server;
 
-public class Renter {
+public class Renter{
 
 }
