@@ -15,6 +15,10 @@ public class LandLord {
         registeredProperties = new ArrayList<Property>();
         this.username = username;
         this.database = database;
+    }
+
+    public void updateProperties(){
+        registeredProperties = new ArrayList<Property>();
         try {
             Connection conn = database.getConnection();
             PreparedStatement state = conn.prepareStatement("SELECT * FROM Property WHERE landlord = ?");
@@ -32,13 +36,12 @@ public class LandLord {
                         address, resSet.getString("typeOfProperty"), resSet.getInt("listId"),
                         resSet.getBoolean("active"), resSet.getBoolean("rented"), resSet.getBoolean("Suspended"),
                         resSet.getDate("dateRented"), resSet.getDate("datePaid")
-                        ));
+                ));
             }
         }catch(SQLException e){
             e.printStackTrace();
         }
     }
-
     public ArrayList<Property> getRegisteredProperties(){
         return registeredProperties;
     }

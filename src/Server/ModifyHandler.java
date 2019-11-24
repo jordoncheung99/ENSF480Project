@@ -17,8 +17,8 @@ public class ModifyHandler extends Handler{
         String[] parts = input.split("#");
         int propID = Integer.parseInt(parts[1]);
         Property property = new Property(parts[2]);
-        rpms.modifyListing(propID,property);
-        sendString("Property modified");
+        rpms.modifyListing(propID,property,username);
+        sendString("Property Modified");
         return true;
     }
 }

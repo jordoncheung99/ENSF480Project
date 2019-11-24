@@ -1,15 +1,22 @@
 package Server;
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class PropertyListing {
     //TODO Update to work with a database
     private ArrayList<Property> properties;
+    private MySQLDatabase database;
 
     PropertyListing(){
         properties = new ArrayList<>();
+        database = new MySQLDatabase();
+        database.initializeConnection();
     }
 
     public int getSize(){
@@ -70,46 +77,26 @@ public class PropertyListing {
     }
 
     public void loadDataBase(){
-        //TODO: Translate to work with databse
-        BufferedReader in = null;
+        properties = new ArrayList<Property>();
         try {
-            in = new BufferedReader(new FileReader("Properties.txt"));
-            String line = null;
-            while( (line = in.readLine())!= null){
-                String[] parts = line.split(" ");
-                Address address = new Address(parts[6],parts[7],parts[8],parts[9],parts[10]);
-                float rentAmmount = Float.parseFloat(parts[0]);
-                float rentTerm = Float.parseFloat(parts[1]);
-                float area = Float.parseFloat(parts[2]);
-                int numOfBedRooms = Integer.parseInt(parts[3]);
-                int numOfBathRoom = Integer.parseInt(parts[4]);
-                boolean furnished = Boolean.parseBoolean(parts[5]);
-                String typeOfProperty = parts[12];
-                System.out.println(parts[5]);
-                int listID = Integer.parseInt(parts[13]);
-                boolean active = Boolean.parseBoolean(parts[14]);
-                boolean rented = Boolean.parseBoolean(parts[15]);
-                boolean suspended = Boolean.parseBoolean(parts[16]);
-                long tempRented = Long.parseLong(parts[17]);
-                long tempPaid = Long.parseLong(parts[18]);
-                Date dateRented = null;
-                Date datePaid = null;
-                if (tempRented != 0){
-                    dateRented = new Date(tempRented);
-                }
-
-                if(tempPaid != 0){
-                    dateRented = new Date(tempPaid);
-                }
-
-                properties.add(new Property(rentAmmount,rentTerm,area,numOfBedRooms,numOfBathRoom,furnished,address,typeOfProperty,listID, active, rented,suspended, dateRented, datePaid));
-                //properties.add(new Server.Property(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5], add, parts[6],parts[6],parts[6],parts[6],));
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("SELECT * FROM Property");
+            ResultSet resSet = state.executeQuery();
+            while(resSet.next())
+            {
+                state = conn.prepareStatement("SELECT * FROM Address WHERE PostalCode = ?");
+                state.setString(1, resSet.getString("address"));
+                ResultSet addressSet = state.executeQuery();
+                addressSet.next();
+                Address address = new Address(addressSet.getString("Street"), addressSet.getString("City"), addressSet.getString("Province"), addressSet.getString("Country"), addressSet.getString("PostalCode"));
+                properties.add(new Property(resSet.getFloat("rentAmount"), resSet.getFloat("rentTerm"), resSet.getFloat("area"),
+                        resSet.getInt("numOfBathRooms"), resSet.getInt("numOfBedRooms"), resSet.getBoolean("furnished"),
+                        address, resSet.getString("typeOfProperty"), resSet.getInt("listId"),
+                        resSet.getBoolean("active"), resSet.getBoolean("rented"), resSet.getBoolean("Suspended"),
+                        resSet.getDate("dateRented"), resSet.getDate("datePaid")
+                ));
             }
-        } catch (FileNotFoundException e) {
-            System.err.println("Text file not found");
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.err.println("Something went wrong while reading the file");
+        }catch(SQLException e){
             e.printStackTrace();
         }
     }

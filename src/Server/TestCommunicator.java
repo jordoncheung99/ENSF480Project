@@ -193,8 +193,10 @@ public class TestCommunicator implements Runnable{
         while(true){
             sendString("Enter 'ADD' to register a property");
             sendString("Enter 'MODIFY' to change a property");
+            sendString("ENTER 'PAYFEE' to make a payment");
             sendString("OR Enter 'VIEW' to view all registered properties");
             while(true) {
+                user.updateProperties();
                 String input = socketIn.readLine();
                 if (input.equalsIgnoreCase("view")) {
                     ArrayList<Property> properties;
