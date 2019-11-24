@@ -8,7 +8,6 @@ public class RPMS {
     private int periodOfFees;
     private float feeAmmount;
     private int numProperties;
-    private int numRented;
     private int numListed;
     PropertyListing listing;
     ArrayList<Observer> observers;
@@ -19,7 +18,6 @@ public class RPMS {
     public  static  void main(String args[]){
         RPMS rpms = new RPMS();
         System.out.println("num Props: " + rpms.numProperties);
-        System.out.println("num Rented: " + rpms.numRented );
         System.out.println("num Listed: " + rpms.numListed);
         Address address = new Address("street", "Calgary", "AB", "Canada", "T3k9D2");
         Property property = new Property(100,200,100,1,2,true,address,"Condo", 123, true, false, false, null,null);
@@ -38,14 +36,13 @@ public class RPMS {
         periodOfFees = 100;
         feeAmmount = 200;
         numProperties = listing.getSize();
-        numRented = listing.getNumRented();
         numListed = listing.getNumActive();
         loginServer = LoginServer.getInstance();
+        filter = new BureFroceFilter();
     }
 
-    public PropertyListing filterSearch(Criteria criteria){
-        //TODO implement filterSearch
-        return null;
+    public ArrayList<Property> filterSearch(ArrayList<Criteria> criteria){
+        return filter.Filter(listing,criteria);
     }
 
     public void addNewProperty(Property property){
@@ -76,24 +73,25 @@ public class RPMS {
         listing.removeProperty(propertyID);
     }
 
-    public boolean payFee(int paidAmmount, int proprtyToActive){
+    public String payFee(float paidAmmount, int proprtyToActive){
         if (paidAmmount != feeAmmount){
-            System.out.println("That is not the right ammount! Pay: " + feeAmmount);
-            return  false;
+            //System.out.println("That is not the right ammount! Pay: " + feeAmmount);
+            return  "That is not the right ammount! Pay: " + feeAmmount;
         }
         Property prop = listing.findID(proprtyToActive);
         if(prop == null){
-            System.out.println("That property dosen't exist!");
+            //System.out.println("That property dosen't exist!");
+            return "That property dosen't exist!";
         }
 
         if(prop.datePaid != null){
-            System.out.println("The property has already been paid for!");
-            return  false;
+//            System.out.println("The property has already been paid for!");
+            return  "The property has already been paid for!";
         }
 
         prop.datePaid = new Date(Instant.now().getEpochSecond());
         prop.active = true;
-        return  true;
+        return "property activated!";
     }
 
     public int reportNumProperties(){
@@ -106,9 +104,35 @@ public class RPMS {
         return numListed;
     }
 
-    public int reportNumRented(){
-        numRented = listing.getNumRented();
-        return numRented;
+    public ArrayList<String> reportNumRented(Date start, Date end){
+
+        ArrayList<String> send = new ArrayList<>();
+        int count = 0;
+        send.add(Integer.toString(count));
+        ArrayList<Property> properties = listing.getProperties();
+        ArrayList<LandLord> landLords = viewLandLords();
+        for (Property prop: properties){
+            if (prop.dateRented.getTime() > start.getTime() && prop.dateRented.getTime() < end.getTime()){
+                count++;
+                //Find land lord who owns the prop
+                String line = "";
+                for (LandLord lord: landLords){
+                    for (Integer id: lord.ownedIDs){
+                        if (id == prop.getListID()){
+                            line += lord.username;
+                        }
+                    }
+                }
+                if (line.length() == 0){
+                    line+= "N/A";
+                }
+                line += prop.getListID();
+                line += prop.getAddress().toString();
+                send.add(line);
+            }
+        }
+        send.set(0,Integer.toString(count));
+        return  send;
     }
 
     public ArrayList<LandLord>  viewLandLords(){
@@ -119,6 +143,27 @@ public class RPMS {
     public ArrayList<Renter> viewRenters(){
         //TODO implement viewRenters
         return null;
+    }
+
+    /**
+     *
+     * @param propID property id itself
+     * @param message the email body
+     * @return success/error message
+     */
+    public String email(int propID, String message){
+
+        //TODO implement emailing system, Guess it can be a string just print to terminal
+        return "Email Sent";
+    }
+
+
+    public void setPeriodOfFees(int newPeriod){
+        periodOfFees = newPeriod;
+    }
+
+    public void setFeeAmmount (float newFee){
+        feeAmmount = newFee;
     }
 
 

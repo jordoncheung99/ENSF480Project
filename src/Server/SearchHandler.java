@@ -11,7 +11,7 @@ public class SearchHandler extends Handler {
     }
 
     @Override
-    public boolean doTask(String input) {
+    public boolean doTask(String input, RPMS rpms) {
         if(!input.contains("SEARCH")){
             return false;
         }
@@ -20,9 +20,13 @@ public class SearchHandler extends Handler {
         for(int i = 1; i <criteriaRaw.length; i++){
             criteria.add( new Criteria(criteriaRaw[i]));
         }
-        System.out.println(criteria.get(0).toServerString());
-        //TODO: Call Search Function!
-        sendString("Sure did search!");
+        ArrayList<Property> properties = rpms.filterSearch(criteria);
+        String send = "";
+        for (Property property: properties){
+            send+=property.toServerString()+"#";
+        }
+        System.out.println("Sending: " + send);
+        sendString(send);
         return true;
     }
 }

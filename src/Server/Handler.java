@@ -18,7 +18,7 @@ public abstract class Handler {
      * @param input
      * @return if the task was done sucessfully
      */
-    public abstract boolean doTask(String input);
+    public abstract boolean doTask(String input, RPMS rpms);
 
 
 
