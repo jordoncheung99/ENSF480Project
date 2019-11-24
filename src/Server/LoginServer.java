@@ -38,16 +38,18 @@ public class LoginServer {
                 addAddress.setString(1, address.postalCode);
                 addAddress.setString(2, address.country);
                 addAddress.setString(3, address.province);
-                addAddress.setString(4, address.city);
-                addAddress.setString(5, address.street);
+                addAddress.setString(4, address.street);
+                addAddress.setString(5, address.city);
+                addAddress.executeUpdate();
 
-                PreparedStatement addPerson = conn.prepareStatement("INSERT INTO person VALUES(?, ?, ?, ?, ?, ?");
+                PreparedStatement addPerson = conn.prepareStatement("INSERT INTO person VALUES(?, ?, ?, ?, ?, ?)");
                 addPerson.setString(1, name.first);
                 addPerson.setString(2, name.last);
                 addPerson.setString(3, type);
                 addPerson.setString(4, address.postalCode);
                 addPerson.setString(5, username);
                 addPerson.setString(6, password);
+                addPerson.executeUpdate();
             }
             else{
                 System.out.println("Username already exists");
