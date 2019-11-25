@@ -1,9 +1,6 @@
 package Server;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -141,9 +138,9 @@ public class RPMS {
 
     public String payFee(float paidAmmount, int propertyToActive){
         listing.loadDataBase();
-        if (paidAmmount != feeAmmount){
+        if (paidAmmount != getFeeAmount()){
             //System.out.println("That is not the right ammount! Pay: " + feeAmmount);
-            return  "That is not the right ammount! Pay: " + feeAmmount;
+            return  "That is not the right ammount! Pay: " + getFeeAmount();
         }
         Property prop = listing.findID(propertyToActive);
         if(prop == null){
@@ -172,19 +169,40 @@ public class RPMS {
     }
 
     public int reportNumProperties(){
-        numProperties = listing.getSize();
+        numProperties = 0;
+        try {
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("SELECT * FROM property");
+            ResultSet resSet = state.executeQuery();
+            while(resSet.next()){
+                numProperties ++;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
         return numProperties;
     }
 
     public int reportNumListedProperties(){
-        numListed = listing.getNumActive();
+        numListed = 0;
+        try {
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("SELECT * FROM property WHERE active = true");
+            ResultSet resSet = state.executeQuery();
+            while(resSet.next()){
+                numListed ++;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
         return numListed;
     }
 
     public ArrayList<String> reportNumRented(Date start, Date end){
-//
-//        ArrayList<String> send = new ArrayList<>();
-//        int count = 0;
+
+        ArrayList<String> send = new ArrayList<>();
+        int count = 0;
 //        send.add(Integer.toString(count));
 //        ArrayList<Property> properties = listing.getProperties();
 //        ArrayList<LandLord> landLords = viewLandLords();
@@ -210,17 +228,66 @@ public class RPMS {
 //        }
 //        send.set(0,Integer.toString(count));
 //        return  send;
+        try {
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("SELECT * FROM property WHERE dateRented > ? AND dateRented < ?");
+            state.setDate(1, new java.sql.Date(start.getTime()));
+            state.setDate(2, new java.sql.Date(end.getTime()));
+            System.out.println(new java.sql.Date(start.getTime()).toString());
+            System.out.println(new java.sql.Date(end.getTime()).toString());
+            ResultSet resSet = state.executeQuery();
+            while(resSet.next()){
+                state = conn.prepareStatement("SELECT * FROM Address WHERE PostalCode = ?");
+                state.setString(1, resSet.getString("address"));
+                ResultSet addressSet = state.executeQuery();
+                addressSet.next();
+                Address address = new Address(addressSet.getString("Street"), addressSet.getString("City"), addressSet.getString("Province"), addressSet.getString("Country"), addressSet.getString("PostalCode"));
+                Property p = new Property(resSet.getFloat("rentAmount"), resSet.getFloat("rentTerm"), resSet.getFloat("area"),
+                        resSet.getInt("numOfBathRooms"), resSet.getInt("numOfBedRooms"), resSet.getBoolean("furnished"),
+                        address, resSet.getString("typeOfProperty"), resSet.getInt("listId"),
+                        resSet.getBoolean("active"), resSet.getBoolean("rented"), resSet.getBoolean("Suspended"),
+                        resSet.getDate("dateRented"), resSet.getDate("datePaid")
+                );
+                String s = "Landlord: " + resSet.getString("landlord") + p.toString();
+                send.add(s);
+            }
+            return send;
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
         return null;
     }
 
     public ArrayList<LandLord>  viewLandLords(){
-        //TODO implement view landlord
-        return null;
+        ArrayList<LandLord> landlords = new ArrayList<LandLord>();
+        try {
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("SELECT * FROM Person WHERE PersonRole = ?");
+            state.setString(1, "LANDLORD");
+            ResultSet resSet = state.executeQuery();
+            while(resSet.next()){
+                landlords.add(new LandLord(database, resSet.getString("Uname")));
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return landlords;
     }
 
     public ArrayList<Renter> viewRenters(){
-        //TODO implement viewRenters
-        return null;
+        ArrayList<Renter> renters = new ArrayList<Renter>();
+        try {
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("SELECT * FROM Person WHERE PersonRole = ?");
+            state.setString(1, "RENTER");
+            ResultSet resSet = state.executeQuery();
+            while(resSet.next()){
+                renters.add(new Renter(database, resSet.getString("Uname")));
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return renters;
     }
 
     /**
@@ -237,13 +304,50 @@ public class RPMS {
 
 
     public void setPeriodOfFees(int newPeriod){
-        periodOfFees = newPeriod;
+        try {
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("UPDATE feeinfo SET period = ? WHERE feeId = 1");
+            state.setInt(1, newPeriod);
+            state.executeUpdate();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
     public void setFeeAmmount (float newFee){
-        feeAmmount = newFee;
+        try {
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("UPDATE feeinfo SET amount = ? WHERE feeId = 1");
+            state.setFloat(1, newFee);
+            state.executeUpdate();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
+    public int getFeePeriod(){
+        try {
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("SELECT * FROM feeinfo WHERE feeId = 1");
+            ResultSet resSet = state.executeQuery();
+            resSet.next();
+            return resSet.getInt("period");
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return 1;
+    }
 
-
+    public float getFeeAmount(){
+        try {
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("SELECT * FROM feeinfo WHERE feeId = 1");
+            ResultSet resSet = state.executeQuery();
+            resSet.next();
+            return resSet.getInt("amount");
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return 200;
+    }
 }

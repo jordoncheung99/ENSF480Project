@@ -185,6 +185,7 @@ public class TestCommunicator implements Runnable{
     }
 
     private void landLordHandler(MySQLDatabase database) throws IOException {
+        //TODO have landlord only modify own properties
         validCommands.add(new ModifyHandler(socketIn,socketOut));
         validCommands.add(new FeeHandler(socketIn,socketOut));
         validCommands.add(new AddHandler(socketIn,socketOut));
@@ -219,12 +220,24 @@ public class TestCommunicator implements Runnable{
         }
     }
 
-    private void managerHandler(MySQLDatabase database){
+    private void managerHandler(MySQLDatabase database) throws IOException {
         validCommands.add(new ModifyHandler(socketIn,socketOut));
         validCommands.add(new SearchHandler(socketIn,socketOut));
         validCommands.add(new ViewPeopleHandler(socketIn,socketOut));
         validCommands.add(new ReportHandler(socketIn,socketOut));
         validCommands.add(new ChangeFeeHandler(socketIn,socketOut));
+        Manager user = new Manager(client.username);
+        sendString("Enter 'MODIFY' to change a property");
+        sendString("Enter 'VIEWPEOPLE' to view all landlords and renters");
+        sendString("Enter 'CHANGEFEE' to alter fee amount and period");
+        while(true) {
+            String input = socketIn.readLine();
+            for (int i = 0; i < validCommands.size(); i++){
+                if (validCommands.get(i).doTask(input,rpms,client.username)){
+                    break;
+                }
+            }
+        }
     }
 
 

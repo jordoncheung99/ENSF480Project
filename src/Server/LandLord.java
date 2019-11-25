@@ -42,6 +42,26 @@ public class LandLord {
             e.printStackTrace();
         }
     }
+
+    public String displayLandlord(){
+        String s = "";
+        try {
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("SELECT * FROM person WHERE Uname = ?");
+            state.setString(1, username);
+            ResultSet resSet = state.executeQuery();
+            resSet.next();
+//            state = conn.prepareStatement("SELECT FROM address WHERE PostalCode = ?");
+//            state.setString(1, resSet.getString("AddressCode"));
+//            ResultSet addressSet = state.executeQuery();
+//            addressSet.next();
+            s = "Username: " + resSet.getString("Uname") + " Name: " + resSet.getString("FirstName") + " " + resSet.getString("LastName") + " Role: " + resSet.getString("PersonRole");
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return s;
+    }
+
     public ArrayList<Property> getRegisteredProperties(){
         return registeredProperties;
     }
