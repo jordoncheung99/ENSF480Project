@@ -16,12 +16,14 @@ public class ViewPeopleHandler extends Handler {
         }
         ArrayList<LandLord> landlords = rpms.viewLandLords();
         ArrayList<Renter> renters = rpms.viewRenters();
+        String sendback = "";
         for(int i = 0; i < landlords.size(); i++){
-            sendString(landlords.get(i).displayLandlord());
+            sendback += landlords.get(i).displayLandlord()+"#";
         }
         for(int i = 0; i < renters.size(); i++){
-            sendString(renters.get(i).displayRenter());
+            sendback += renters.get(i).displayRenter()+"#";
         }
+        sendString(sendback);
         return true;
     }
 }
