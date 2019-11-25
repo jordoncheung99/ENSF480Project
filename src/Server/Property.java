@@ -18,7 +18,7 @@ public class Property {
     Date dateRented;
     Date datePaid;
 
-    Property(float rentAmmount, float rentTerm, float area, int numOfBathRooms, int numOfBedRooms, boolean furnished, Address address, String typeOfProperty, int listID, boolean active, boolean rented, boolean suspended, Date dateRented, Date datePaid){
+    public Property(float rentAmmount, float rentTerm, float area, int numOfBathRooms, int numOfBedRooms, boolean furnished, Address address, String typeOfProperty, int listID, boolean active, boolean rented, boolean suspended, Date dateRented, Date datePaid){
         this.rentAmmount = rentAmmount;
         this.rentTerm = rentTerm;
         this.area = area;
@@ -55,9 +55,7 @@ public class Property {
         return numOfBathRooms;
     }
 
-    public boolean getFurnished(){
-        return furnished;
-    }
+    public boolean getFurnished() { return furnished; }
 
     public Address getAddress(){
         return  address;
@@ -78,6 +76,12 @@ public class Property {
     public boolean getRented(){
         return rented;
     }
+
+    public boolean getSuspended() { return suspended; }
+
+    public Date getDateRented() { return dateRented; }
+
+    public Date getDatePaid() { return datePaid; }
 
     Property(String input){
         String[] parts = input.split("&");
@@ -135,8 +139,8 @@ public class Property {
     }
 
     public String toString(){
-        String sendBack = rentAmmount + " " + rentTerm + " " + area + " " + numOfBedRooms + " " + numOfBathRooms + " " + furnished;
-        sendBack += " " + address.toString() + " " + typeOfProperty + " " + listID  + " " +  active  + " " +  rented + " " + suspended;
+        String sendBack = "Property ID: " + listID + " Rent Amount: " + rentAmmount + " Rent Term: " + rentTerm + " Area: " + area + " Bedrooms: " + numOfBedRooms + " Bathrooms: " + numOfBathRooms + " Furnished: " + furnished;
+        sendBack += " Address: " + address.toString() + " Type: " + typeOfProperty + " Is Active: " +  active  + " Is Rented: " +  rented + " Is Suspended: " + suspended;
         if(dateRented == null){
             sendBack += " " + 0;
         }else{

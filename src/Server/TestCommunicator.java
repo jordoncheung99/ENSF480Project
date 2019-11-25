@@ -146,32 +146,32 @@ public class TestCommunicator implements Runnable{
 
 
     private void handleRPMSRouting() throws IOException{
-        if (client == null){
-             renterHandler();
-        }else{
+        MySQLDatabase database = new MySQLDatabase();
+        database.initializeConnection();
+        if(client == null) {
+            renterHandler();
+        }else {
             sendString("User has successfully logged in as a " + client.getType());
-            switch(client.getType()) {
+            switch (client.getType()) {
                 case "RENTER":
-                    regRentHandler();
+                    regRentHandler(database);
                     break;
                 case "LANDLORD":
-                    landLordHandler();
+                    landLordHandler(database);
                     break;
                 case "MANAGER":
-                    managerHandler();
+                    managerHandler(database);
                     break;
             }
         }
-
         while (true){
             String input = socketIn.readLine();
             for (int i = 0; i < validCommands.size(); i++){
-                if (validCommands.get(i).doTask(input,rpms)){
+                if (validCommands.get(i).doTask(input,rpms,"")){
                     break;
                 }
             }
         }
-
     }
 
     private void renterHandler(){
@@ -179,24 +179,65 @@ public class TestCommunicator implements Runnable{
         validCommands.add(new EmailHandler(socketIn,socketOut));
     }
 
-    private void regRentHandler(){
+    private void regRentHandler(MySQLDatabase database){
         validCommands.add(new SearchHandler(socketIn,socketOut));
         validCommands.add(new EmailHandler(socketIn,socketOut));
     }
 
-    private void landLordHandler(){
+    private void landLordHandler(MySQLDatabase database) throws IOException {
+        //TODO have landlord only modify own properties
         validCommands.add(new ModifyHandler(socketIn,socketOut));
         validCommands.add(new FeeHandler(socketIn,socketOut));
         validCommands.add(new AddHandler(socketIn,socketOut));
         validCommands.add(new SearchHandler(socketIn,socketOut));
+        LandLord user = new LandLord(database, client.username);
+        while(true){
+            sendString("Enter 'ADD' to register a property");
+            sendString("Enter 'MODIFY' to change a property");
+            sendString("ENTER 'PAYFEE' to make a payment");
+            sendString("OR Enter 'VIEW' to view all registered properties");
+            while(true) {
+                user.updateProperties();
+                String input = socketIn.readLine();
+                if (input.equalsIgnoreCase("view")) {
+                    ArrayList<Property> properties;
+                    properties = user.getRegisteredProperties();
+                    if(properties.size() == 0) {
+                        sendString("No registered properties");
+                    }
+                    else {
+                        for (Property property : properties) {
+                            sendString(property.toString());
+                        }
+                    }
+                }
+                for (int i = 0; i < validCommands.size(); i++){
+                    if (validCommands.get(i).doTask(input,rpms,client.username)){
+                        break;
+                    }
+                }
+            }
+        }
     }
 
-    private void managerHandler(){
+    private void managerHandler(MySQLDatabase database) throws IOException {
         validCommands.add(new ModifyHandler(socketIn,socketOut));
         validCommands.add(new SearchHandler(socketIn,socketOut));
         validCommands.add(new ViewPeopleHandler(socketIn,socketOut));
         validCommands.add(new ReportHandler(socketIn,socketOut));
         validCommands.add(new ChangeFeeHandler(socketIn,socketOut));
+        Manager user = new Manager(client.username);
+        sendString("Enter 'MODIFY' to change a property");
+        sendString("Enter 'VIEWPEOPLE' to view all landlords and renters");
+        sendString("Enter 'CHANGEFEE' to alter fee amount and period");
+        while(true) {
+            String input = socketIn.readLine();
+            for (int i = 0; i < validCommands.size(); i++){
+                if (validCommands.get(i).doTask(input,rpms,client.username)){
+                    break;
+                }
+            }
+        }
     }
 
 

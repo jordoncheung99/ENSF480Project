@@ -10,7 +10,7 @@ public class EmailHandler extends Handler {
     }
 
     @Override
-    public boolean doTask(String input, RPMS rpms) {
+    public boolean doTask(String input, RPMS rpms, String username) {
         if(!input.contains("EMAIL")){
             return  false;
         }

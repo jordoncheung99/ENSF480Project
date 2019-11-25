@@ -14,14 +14,14 @@ public class AddHandler extends Handler {
     }
 
     @Override
-    public boolean doTask(String input, RPMS rpms) {
+    public boolean doTask(String input, RPMS rpms, String username) {
         if (!input.contains("ADD")){
             return false;
         }
         String parts[] = input.split("#");
         Property p = new Property(parts[1]);
-        rpms.addNewProperty(p);
-        sendString("PropertyAdded");
+        rpms.addNewProperty(p, username);
+        sendString("Property Added");
         return true;
     }
 }

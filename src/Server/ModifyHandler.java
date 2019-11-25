@@ -10,15 +10,15 @@ public class ModifyHandler extends Handler{
     }
 
     @Override
-    public boolean doTask(String input, RPMS rpms) {
+    public boolean doTask(String input, RPMS rpms, String username) {
         if (!input.contains("MODIFY")){
             return false;
         }
         String[] parts = input.split("#");
         int propID = Integer.parseInt(parts[1]);
         Property property = new Property(parts[2]);
-        rpms.modifyListing(propID,property);
-        sendString("Property modified");
+        rpms.modifyListing(propID,property,username);
+        sendString("Property Modified");
         return true;
     }
 }

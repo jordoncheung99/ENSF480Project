@@ -8,8 +8,6 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class LoginServer {
-    //TODO translate to work with data bases
-    //TODO translate to work over a server (prob routed through RPMS)
     ArrayList<User> users;
     private MySQLDatabase database;
     private static LoginServer instance;
@@ -29,24 +27,23 @@ public class LoginServer {
     }
 
     public void addUser(String username, String password, String type, Name name, Address address){
-        //TODO Pass in address and name objects
         try {
             if(!exists(username)) {
                 Connection conn = database.getConnection();
 
                 PreparedStatement addAddress = conn.prepareStatement("INSERT INTO address VALUES(?, ?, ?, ?, ?)");
-                addAddress.setString(1, address.postalCode);
-                addAddress.setString(2, address.country);
-                addAddress.setString(3, address.province);
-                addAddress.setString(4, address.street);
-                addAddress.setString(5, address.city);
+                addAddress.setString(1, address.getPostalCode());
+                addAddress.setString(2, address.getCountry());
+                addAddress.setString(3, address.getProvince());
+                addAddress.setString(4, address.getStreet());
+                addAddress.setString(5, address.getCity());
                 addAddress.executeUpdate();
 
                 PreparedStatement addPerson = conn.prepareStatement("INSERT INTO person VALUES(?, ?, ?, ?, ?, ?)");
                 addPerson.setString(1, name.first);
                 addPerson.setString(2, name.last);
                 addPerson.setString(3, type);
-                addPerson.setString(4, address.postalCode);
+                addPerson.setString(4, address.getPostalCode());
                 addPerson.setString(5, username);
                 addPerson.setString(6, password);
                 addPerson.executeUpdate();
@@ -71,7 +68,7 @@ public class LoginServer {
                 return null;
             }
             else{
-                User temp = new User(resSet.getString("Uname"), resSet.getString("Pass"), null);
+                User temp = new User(resSet.getString("Uname"), resSet.getString("Pass"), resSet.getString("PersonRole"));
                 return temp;
             }
         }catch(SQLException e){

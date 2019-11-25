@@ -12,13 +12,13 @@ public class ReportHandler extends Handler{
     }
 
     @Override
-    public boolean doTask(String input, RPMS rpms) {
+    public boolean doTask(String input, RPMS rpms, String username) {
         if(!input.contains("REPORT")){
             return false;
         }
         String parts[] = input.split("#");
-        Date start = new Date(Integer.parseInt(parts[1]));
-        Date end  = new Date(Integer.parseInt(parts[2]));
+        Date start = new Date(Long.parseLong(parts[1]));
+        Date end  = new Date(Long.parseLong(parts[2]));
         String send = "";
         send+= "Number of total Properties: "+rpms.reportNumProperties()+"#";
 
