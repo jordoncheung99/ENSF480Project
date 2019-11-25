@@ -30,7 +30,7 @@ public class BureFroceFilter implements Filter {
     }
 
     private boolean isWithinRange(Property property, Criteria criteria){
-        if (property.getFurnished()){
+        if (criteria.getFurnishedEnable()){
             if (property.getFurnished() != criteria.getFurnished()){
                 return false;
             }

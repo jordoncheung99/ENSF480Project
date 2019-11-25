@@ -3,7 +3,7 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 
-public class LandlordViewRegisteredProperties {
+public class ViewProperties {
     private JPanel panel1;
     private JPanel titlePanel;
     private JPanel buttonPanel;
