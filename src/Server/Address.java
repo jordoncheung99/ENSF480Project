@@ -6,9 +6,8 @@ public class Address {
     private String province;
     private String country;
     private String postalCode;
-    private String cityQuadrant;
 
-    Address(String street, String city, String province, String country, String postalCode){
+    public Address(String street, String city, String province, String country, String postalCode){
         this.street = street;
         this.city = city;
         this.province = province;
@@ -16,7 +15,7 @@ public class Address {
         this.postalCode = postalCode;
     }
 
-    Address(String s){
+    public Address(String s){
         String[] parts = s.split(" ");
         street = parts[0];
         city = parts[1];
@@ -49,9 +48,6 @@ public class Address {
         this.city = city;
     }
 
-    public void setCityQuadrant(String cityQuadrant) {
-        this.cityQuadrant = cityQuadrant;
-    }
 
     public void setCountry(String country) {
         this.country = country;
@@ -71,7 +67,7 @@ public class Address {
 
 
     public String toString(){
-        String sendBack = street + " " + city + " " + province + " " + country + " " + postalCode + " " + cityQuadrant;
+        String sendBack = street + " " + city + " " + province + " " + country + " " + postalCode;
         return  sendBack;
     }
 }

@@ -7,4 +7,9 @@ public class Name {
         this.first = first;
         this.last = last;
     }
+
+    @Override
+    public String toString() {
+        return first + " " + last;
+    }
 }

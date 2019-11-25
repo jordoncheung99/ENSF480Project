@@ -18,7 +18,7 @@ public class Property {
     Date dateRented;
     Date datePaid;
 
-    Property(float rentAmmount, float rentTerm, float area, int numOfBathRooms, int numOfBedRooms, boolean furnished, Address address, String typeOfProperty, int listID, boolean active, boolean rented, boolean suspended, Date dateRented, Date datePaid){
+    public Property(float rentAmmount, float rentTerm, float area, int numOfBathRooms, int numOfBedRooms, boolean furnished, Address address, String typeOfProperty, int listID, boolean active, boolean rented, boolean suspended, Date dateRented, Date datePaid){
         this.rentAmmount = rentAmmount;
         this.rentTerm = rentTerm;
         this.area = area;
