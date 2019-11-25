@@ -169,6 +169,7 @@ public class TestCommunicator implements Runnable{
     private void renterHandler() throws IOException {
         validCommands.add(new SearchHandler(socketIn,socketOut));
         validCommands.add(new EmailHandler(socketIn,socketOut));
+        sendString("logged in as RENT");
         sendString("Enter SEARCH to search");
         sendString("Enter EMAIL to send an email");
         while(true) {

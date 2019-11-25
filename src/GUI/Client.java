@@ -10,61 +10,101 @@ import java.io.*;
 import java.net.Socket;
 
 class Client {
+	Socket clientSocket;
+	PrintWriter outBuffer;
+	BufferedReader inBuffer;
+	BufferedReader inFromUser;
+
+	Client(String IP, int port){
+		try {
+			clientSocket = new Socket(IP,port);
+			// Initialize input and an output stream for the connection(s)
+			outBuffer = new PrintWriter(clientSocket.getOutputStream(), true);
+			inBuffer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+			// Initialize user input stream
+			inFromUser = new BufferedReader(new InputStreamReader(System.in));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try{
+			runClient();
+		}catch (IOException e){
+
+		}catch (InterruptedException e){
+
+		}
+	}
+
+
+	public void runClient() throws IOException, InterruptedException {
+		String line = "";
+		String serverOut = "";
+		while (!line.equals("logout")) {
+			// Send to the server
+
+			serverOut = readServer();
+			System.out.println(serverOut);
+
+			if(serverOut.contains("logged in")){
+				break;
+			}
+
+			line = inFromUser.readLine();
+			outBuffer.println(line);
+
+
+
+			//System.out.print("Please enter a message to be sent to the server ('logout' to terminate): ");
+		}
+		openCorrectGUI(serverOut);
+
+
+		// Close the socket
+		clientSocket.close();
+	}
+
+	private void openCorrectGUI(String input){
+		if(input.contains("LANDLORD")){
+			LandlordGUI gui = new LandlordGUI(outBuffer,inBuffer);
+		}else if(input.contains("MANAGER")){
+			System.out.println("MANAGER");
+		}else if (input.contains("RENTER")){
+			System.out.println("REGRENTER");
+		}else if (input.contains("RENT")){
+			System.out.println("Normie");
+		}
+	}
 
     public static void main(String args[]) throws Exception 
-    { 
-        if (args.length != 2)
-        {
-            System.out.println("Usage: TCPClient <Server.Server IP> <Server.Server Port>");
-            System.exit(1);
-        }
+    {
+      Client c = new Client("LocalHost",4099);
+    }
 
-
-        //Assume local host and 4099
-		Socket clientSocket = new Socket("localHost",4099);
-
-        // Initialize input and an output stream for the connection(s)
-		PrintWriter outBuffer = new PrintWriter(clientSocket.getOutputStream(), true);
-		
-        BufferedReader inBuffer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-        // Initialize user input stream
-        String line; 
-        BufferedReader inFromUser = 
-        new BufferedReader(new InputStreamReader(System.in)); 
-
-        //Wait for input message
+    public String readServer() throws IOException, InterruptedException {
+    	String sendBack = "";
 		while(!inBuffer.ready()){
 			Thread.sleep(50);
 		}
 		Thread.sleep(100);
+		// Getting response from the server
 		while(inBuffer.ready()){
-			line = inBuffer.readLine();
-			System.out.println("Server: " + line);
+			sendBack += inBuffer.readLine() + "\n" ;
 		}
+		return sendBack;
+	}
 
-        System.out.print("Please enter a message to be sent to the server ('logout' to terminate): ");
-        line = inFromUser.readLine(); 
-        while (!line.equals("logout")) {
-			// Send to the server
-			outBuffer.println(line);
-
-			while(!inBuffer.ready()){
-				Thread.sleep(50);
-			}
-			Thread.sleep(100);
-			// Getting response from the server
-			while(inBuffer.ready()){
-				line = inBuffer.readLine();
-				System.out.println("Server.Server: " + line);
-			}
-
-			System.out.print("Please enter a message to be sent to the server ('logout' to terminate): ");
-			line = inFromUser.readLine();
-
-        }
-
-        // Close the socket
-        clientSocket.close();           
-    }
+	public static String readServer(BufferedReader inBuffer) throws IOException, InterruptedException {
+		String sendBack = "";
+		while(!inBuffer.ready()){
+			Thread.sleep(50);
+		}
+		Thread.sleep(100);
+		// Getting response from the server
+		while(inBuffer.ready()){
+			sendBack += inBuffer.readLine() + "\n" ;
+		}
+		return sendBack;
+	}
 } 

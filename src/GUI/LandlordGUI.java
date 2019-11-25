@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class LandlordGUI {
     private JPanel panel1;
@@ -16,11 +19,14 @@ public class LandlordGUI {
     private JButton searchButton;
     private JButton payFeeButton;
     private JButton editPropertyButton;
-
     private LandlordRegisterPropertyGUI regForm;
 
-    public LandlordGUI() {
-        JFrame frame = new JFrame("Hell");
+    private PrintWriter outBuffer;
+    private BufferedReader inBuffer;
+
+
+    public LandlordGUI(PrintWriter outBuffer, BufferedReader inBuffer) {
+        JFrame frame = new JFrame("LandLord");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -30,13 +36,15 @@ public class LandlordGUI {
         searchButton.addActionListener(new ALSearch());
         editPropertyButton.addActionListener(new ALEdit());
         frame.setVisible(true);
+        outBuffer.println("ADD");
+        System.out.println("It send a thing");
+        try {
+            System.out.println(Client.readServer(inBuffer));
+        } catch (IOException | InterruptedException e) {
+
+        }
+
     }
-
-
-    public static void main(String args[]) {
-        LandlordGUI g = new LandlordGUI();
-    }
-
 
     private class ALOpenRegisterPropertyForm implements ActionListener {
         @Override
