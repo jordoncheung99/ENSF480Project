@@ -14,9 +14,19 @@ public class EmailHandler extends Handler {
         if(!input.contains("EMAIL")){
             return  false;
         }
-        String parts[] = input.split("#");
-        int propID = Integer.parseInt(parts[1]);
-        sendString(rpms.email(propID,parts[2], username));
-        return true;
+        if(username != "null") {
+            String parts[] = input.split("#");
+            int propID = Integer.parseInt(parts[1]);
+            sendString(rpms.email(propID, parts[2], username));
+            return true;
+        }
+        else{
+            String parts[] = input.split("#");
+            int propID = Integer.parseInt(parts[1]);
+            username = parts[3];
+            String password = parts[4];
+            sendString(rpms.email(propID, parts[2], username, password));
+            return true;
+        }
     }
 }

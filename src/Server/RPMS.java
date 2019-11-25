@@ -38,7 +38,7 @@ public class RPMS {
     RPMS(){
         database = new MySQLDatabase();
         database.initializeConnection();
-        observers = new ArrayList<>();
+        observers = new ArrayList();
         listing = new PropertyListing();
         listing.loadDataBase();
         periodOfFees = 100;
@@ -93,35 +93,46 @@ public class RPMS {
         }
     }
 
-    public void modifyListing(int propertyID, Property property, String username){
+    public String modifyListing(int propertyID, Property property, String username){
         try {
-            listing.modifyProperty(propertyID, property);
             Connection conn = database.getConnection();
-            PreparedStatement state = conn.prepareStatement("UPDATE Property SET landlord = ?, area = ?, rentAmount = ?, rentTerm = ?, numOfBedRooms = ?, numOfBathRooms = ?, address = ?, typeOfProperty = ?, active = ?, rented = ?, suspended = ?, dateRented = ?, datePaid = ?, furnished = ? WHERE listID = ?");
-            state.setString(1, username);
-            state.setFloat(2, property.getArea());
-            state.setFloat(3, property.getRentAmmount());
-            state.setFloat(4, property.getRentTerm());
-            state.setInt(5, property.getNumOfBedRooms());
-            state.setInt(6, property.getNumOfBathRooms());
-            state.setString(7, property.getAddress().getPostalCode());
-            state.setString(8, property.getTypeOfProperty());
-            state.setBoolean(9, property.getActive());
-            state.setBoolean(10, property.getRented());
-            state.setBoolean(11, property.getSuspended());
-            state.setDate(12, new java.sql.Date(property.getDateRented().getTime()));
-            if(property.getDatePaid() == null){
-                state.setDate(13, null);
-            }else {
-                state.setDate(13, new java.sql.Date(property.getDatePaid().getTime()));
+            PreparedStatement state = conn.prepareStatement("SELECT * FROM property WHERE listID = ? AND landlord = ?");
+            state.setInt(1, propertyID);
+            state.setString(2, username);
+            ResultSet landlordSet = state.executeQuery();
+            if(landlordSet.next()) {
+                listing.modifyProperty(propertyID, property);
+                state = conn.prepareStatement("UPDATE Property SET landlord = ?, area = ?, rentAmount = ?, rentTerm = ?, numOfBedRooms = ?, numOfBathRooms = ?, address = ?, typeOfProperty = ?, active = ?, rented = ?, suspended = ?, dateRented = ?, datePaid = ?, furnished = ? WHERE listID = ?");
+                state.setString(1, username);
+                state.setFloat(2, property.getArea());
+                state.setFloat(3, property.getRentAmmount());
+                state.setFloat(4, property.getRentTerm());
+                state.setInt(5, property.getNumOfBedRooms());
+                state.setInt(6, property.getNumOfBathRooms());
+                state.setString(7, property.getAddress().getPostalCode());
+                state.setString(8, property.getTypeOfProperty());
+                state.setBoolean(9, property.getActive());
+                state.setBoolean(10, property.getRented());
+                state.setBoolean(11, property.getSuspended());
+                state.setDate(12, new java.sql.Date(property.getDateRented().getTime()));
+                if (property.getDatePaid() == null) {
+                    state.setDate(13, null);
+                } else {
+                    state.setDate(13, new java.sql.Date(property.getDatePaid().getTime()));
+                }
+                state.setBoolean(14, property.getFurnished());
+                state.setInt(15, propertyID);
+                state.executeUpdate();
+                notifyObservers(property);
+                return "Property Added";
             }
-            state.setBoolean(14, property.getFurnished());
-            state.setInt(15, propertyID);
-            state.executeUpdate();
-            notifyObservers(property);
+            else{
+                return "You cannot modify this property";
+            }
         }catch(SQLException e){
             e.printStackTrace();
         }
+        return "Cannot modify property";
     }
 
     public void registerObserver(Observer observer){
@@ -208,31 +219,6 @@ public class RPMS {
 
         ArrayList<String> send = new ArrayList<>();
         int count = 0;
-//        send.add(Integer.toString(count));
-//        ArrayList<Property> properties = listing.getProperties();
-//        ArrayList<LandLord> landLords = viewLandLords();
-//        for (Property prop: properties){
-//            if (prop.dateRented.getTime() > start.getTime() && prop.dateRented.getTime() < end.getTime()){
-//                count++;
-//                //Find land lord who owns the prop
-//                String line = "";
-//                for (LandLord lord: landLords){
-//                    for (Integer id: lord.ownedIDs){
-//                        if (id == prop.getListID()){
-//                            line += lord.username;
-//                        }
-//                    }
-//                }
-//                if (line.length() == 0){
-//                    line+= "N/A";
-//                }
-//                line += prop.getListID();
-//                line += prop.getAddress().toString();
-//                send.add(line);
-//            }
-//        }
-//        send.set(0,Integer.toString(count));
-//        return  send;
         try {
             Connection conn = database.getConnection();
             PreparedStatement state = conn.prepareStatement("SELECT * FROM property WHERE dateRented > ? AND dateRented < ?");
@@ -351,6 +337,56 @@ public class RPMS {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return "Email Sent";
+    }
+
+    public String email(int propID, String message, String username, String password){
+        String to = "";
+        Connection conn;
+        PreparedStatement state;
+        conn = database.getConnection();
+        try {
+            state = conn.prepareStatement("SELECT landlord FROM property WHERE listID = ?");
+            state.setInt(1, propID);
+            ResultSet resSet = state.executeQuery();
+            resSet.next();
+            to = resSet.getString("landlord");
+            System.out.println(username + " " + password);
+
+            Properties prop = new Properties();
+            prop.put("mail.smtp.host", "smtp.gmail.com");
+            prop.put("mail.smtp.port", "587");
+            prop.put("mail.smtp.auth", "true");
+            prop.put("mail.smtp.starttls.enable", "true"); //TLS
+
+            Session session = Session.getInstance(prop,
+                    new javax.mail.Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(username, password);
+                        }
+                    });
+
+            try {
+
+                Message emailMessage = new MimeMessage(session);
+                emailMessage.setFrom(new InternetAddress(username));
+                emailMessage.setRecipients(
+                        Message.RecipientType.TO,
+                        InternetAddress.parse(to)
+                );
+                emailMessage.setSubject("RPMS Inquiry About Property With ID: " + propID);
+                emailMessage.setText(message);
+
+                Transport.send(emailMessage);
+
+                System.out.println("Done");
+
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
         }catch(SQLException e){
             e.printStackTrace();
         }
