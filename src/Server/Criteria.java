@@ -15,7 +15,7 @@ public class Criteria {
     private int[] propertyIDs;
 
 
-    Criteria(boolean enable, boolean furnished, int numBathRooms, int numBedRoom, String[] typeOfProprty, float area, float rentTerm, float rentAmmount, String[] cityQuadrant, int[] propertyIDs){
+    public Criteria(boolean enable, boolean furnished, int numBathRooms, int numBedRoom, String[] typeOfProprty, float area, float rentTerm, float rentAmmount, String[] cityQuadrant, int[] propertyIDs){
         furnishedEnable = enable;
         this.furnished = furnished;
         this.numBathRooms = numBathRooms;

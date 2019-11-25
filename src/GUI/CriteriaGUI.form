@@ -135,7 +135,7 @@
         </properties>
         <border type="none"/>
         <children>
-          <component id="3557" class="javax.swing.JTextField" binding="furnishedEnable">
+          <component id="3557" class="javax.swing.JTextField" binding="furnishedEnableField">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -145,7 +145,7 @@
               <background color="-1114369"/>
             </properties>
           </component>
-          <component id="b399c" class="javax.swing.JTextField" binding="furnished">
+          <component id="b399c" class="javax.swing.JTextField" binding="furnishedField">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -155,7 +155,7 @@
               <background color="-1114369"/>
             </properties>
           </component>
-          <component id="5c270" class="javax.swing.JTextField" binding="numBathRooms">
+          <component id="5c270" class="javax.swing.JTextField" binding="numBathRoomsField">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -165,7 +165,7 @@
               <background color="-1114369"/>
             </properties>
           </component>
-          <component id="afe47" class="javax.swing.JTextField" binding="numBedRooms">
+          <component id="afe47" class="javax.swing.JTextField" binding="numBedRoomsField">
             <constraints>
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -175,7 +175,7 @@
               <background color="-1114369"/>
             </properties>
           </component>
-          <component id="203e5" class="javax.swing.JTextField" binding="typeProperty">
+          <component id="203e5" class="javax.swing.JTextField" binding="typePropertyField">
             <constraints>
               <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -185,7 +185,7 @@
               <background color="-1114369"/>
             </properties>
           </component>
-          <component id="bc85b" class="javax.swing.JTextField" binding="area">
+          <component id="bc85b" class="javax.swing.JTextField" binding="areaField">
             <constraints>
               <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -195,7 +195,7 @@
               <background color="-1114369"/>
             </properties>
           </component>
-          <component id="4bd7a" class="javax.swing.JTextField" binding="rentTerm">
+          <component id="4bd7a" class="javax.swing.JTextField" binding="rentTermField">
             <constraints>
               <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -205,7 +205,7 @@
               <background color="-1114369"/>
             </properties>
           </component>
-          <component id="97337" class="javax.swing.JTextField" binding="rentAmount">
+          <component id="97337" class="javax.swing.JTextField" binding="rentAmountField">
             <constraints>
               <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -215,7 +215,7 @@
               <background color="-1114369"/>
             </properties>
           </component>
-          <component id="cb369" class="javax.swing.JTextField" binding="cityQuadrant">
+          <component id="cb369" class="javax.swing.JTextField" binding="cityQuadrantField">
             <constraints>
               <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -225,7 +225,7 @@
               <background color="-1114369"/>
             </properties>
           </component>
-          <component id="205df" class="javax.swing.JTextField" binding="propertyID">
+          <component id="205df" class="javax.swing.JTextField" binding="propertyIDField">
             <constraints>
               <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
