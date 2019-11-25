@@ -48,8 +48,15 @@ public class ViewProperties {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println(displayList.getSelectedIndex());
-
+            int slectedIndex = displayList.getSelectedIndex();
+            int propID = -1;
+            if (slectedIndex >= 0) {
+                propID = properties.get(slectedIndex).getListID();
+            }
+            //TODO work with the client
+            if (propID < 0) {
+                System.out.println("Email to " + propID);
+            }
         }
     }
 
@@ -59,15 +66,14 @@ public class ViewProperties {
         public void actionPerformed(ActionEvent e) {
 
             //TODO MOVE TO CRETIERA FORM
-            Property[] temp = new Property[properties.size()];
             properties.add(new Property(100, 200, 300, 400, 500, true, new Address("yes", "no", "maybe", "so", "what"), "GARBAGE", 10, true, true, true, null, null));
-            System.out.println(temp.length);
+
+            Property[] temp = new Property[properties.size()];
             for (int i = 0; i < properties.size(); i++) {
                 temp[i] = properties.get(i);
             }
             displayList = new JList(temp);
             panel1.add(displayList);
-            System.out.println("help");
         }
     }
 

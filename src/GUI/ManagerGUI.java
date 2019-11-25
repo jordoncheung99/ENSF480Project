@@ -37,6 +37,8 @@ public class ManagerGUI {
             //TODO hook it up to the client;
             String send = "VIEWPEOPLE";
             System.out.println("Send to Server: " + send);
+            String test = "Y#M#C#A";
+            new ManagerViewPeopleGUI(test);
         }
     }
 
