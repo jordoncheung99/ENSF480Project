@@ -16,10 +16,7 @@ public class SearchHandler extends Handler {
             return false;
         }
         String[] criteriaRaw = Handler.processString(input);
-        ArrayList<Criteria> criteria = new ArrayList<>();
-        for(int i = 1; i <criteriaRaw.length; i++){
-            criteria.add( new Criteria(criteriaRaw[i]));
-        }
+        Criteria criteria = new Criteria(criteriaRaw[1]);
         ArrayList<Property> properties = rpms.filterSearch(criteria);
         String send = "";
         for (Property property: properties){

@@ -7,7 +7,7 @@ public class BureFroceFilter implements Filter {
 
 
     @Override
-    public ArrayList<Property> Filter(PropertyListing properties, ArrayList<Criteria> criteria) {
+    public ArrayList<Property> Filter(PropertyListing properties, Criteria criteria) {
         ArrayList<Property> send = new ArrayList<>();
         ArrayList<Property> master = properties.getProperties();
         //Initally populate the list
@@ -17,13 +17,10 @@ public class BureFroceFilter implements Filter {
             }
         }
         //check against criteria
-        for (int i = 0; i < criteria.size(); i++){
-            Criteria tempCriteria = criteria.get(i);
-            for (int j = 0; j < send.size(); i++){
-                if (!isWithinRange(send.get(j),tempCriteria)){
-                    send.remove(j);
-                    j--;
-                }
+        for (int j = 0; j < send.size(); j++){
+            if (!isWithinRange(send.get(j),criteria)){
+                send.remove(j);
+                j--;
             }
         }
         return  send;
