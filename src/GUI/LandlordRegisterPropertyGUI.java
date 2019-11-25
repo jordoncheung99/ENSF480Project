@@ -41,7 +41,7 @@ public class LandlordRegisterPropertyGUI {
         frame.setVisible(true);
     }
 
-    private class ALBack implements ActionListener{
+    private class ALBack implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {

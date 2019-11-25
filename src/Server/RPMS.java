@@ -169,19 +169,40 @@ public class RPMS {
     }
 
     public int reportNumProperties(){
-        numProperties = listing.getSize();
+        numProperties = 0;
+        try {
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("SELECT * FROM property");
+            ResultSet resSet = state.executeQuery();
+            while(resSet.next()){
+                numProperties ++;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
         return numProperties;
     }
 
     public int reportNumListedProperties(){
-        numListed = listing.getNumActive();
+        numListed = 0;
+        try {
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("SELECT * FROM property WHERE active = true");
+            ResultSet resSet = state.executeQuery();
+            while(resSet.next()){
+                numListed ++;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
         return numListed;
     }
 
     public ArrayList<String> reportNumRented(Date start, Date end){
-//
-//        ArrayList<String> send = new ArrayList<>();
-//        int count = 0;
+
+        ArrayList<String> send = new ArrayList<>();
+        int count = 0;
 //        send.add(Integer.toString(count));
 //        ArrayList<Property> properties = listing.getProperties();
 //        ArrayList<LandLord> landLords = viewLandLords();
@@ -207,6 +228,33 @@ public class RPMS {
 //        }
 //        send.set(0,Integer.toString(count));
 //        return  send;
+        try {
+            Connection conn = database.getConnection();
+            PreparedStatement state = conn.prepareStatement("SELECT * FROM property WHERE dateRented > ? AND dateRented < ?");
+            state.setDate(1, new java.sql.Date(start.getTime()));
+            state.setDate(2, new java.sql.Date(end.getTime()));
+            System.out.println(new java.sql.Date(start.getTime()).toString());
+            System.out.println(new java.sql.Date(end.getTime()).toString());
+            ResultSet resSet = state.executeQuery();
+            while(resSet.next()){
+                state = conn.prepareStatement("SELECT * FROM Address WHERE PostalCode = ?");
+                state.setString(1, resSet.getString("address"));
+                ResultSet addressSet = state.executeQuery();
+                addressSet.next();
+                Address address = new Address(addressSet.getString("Street"), addressSet.getString("City"), addressSet.getString("Province"), addressSet.getString("Country"), addressSet.getString("PostalCode"));
+                Property p = new Property(resSet.getFloat("rentAmount"), resSet.getFloat("rentTerm"), resSet.getFloat("area"),
+                        resSet.getInt("numOfBathRooms"), resSet.getInt("numOfBedRooms"), resSet.getBoolean("furnished"),
+                        address, resSet.getString("typeOfProperty"), resSet.getInt("listId"),
+                        resSet.getBoolean("active"), resSet.getBoolean("rented"), resSet.getBoolean("Suspended"),
+                        resSet.getDate("dateRented"), resSet.getDate("datePaid")
+                );
+                String s = "Landlord: " + resSet.getString("landlord") + p.toString();
+                send.add(s);
+            }
+            return send;
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
         return null;
     }
 
