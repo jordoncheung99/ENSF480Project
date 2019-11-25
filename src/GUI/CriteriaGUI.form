@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI.CriteriaGUI">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="500" height="420"/>
+    </constraints>
+    <properties>
+      <background color="-11038572"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <grid id="c9de5" binding="titlePanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="North"/>
+        <properties>
+          <background color="-11038572"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="9c002" class="javax.swing.JLabel" binding="titleLabel">
+            <constraints border-constraint="North"/>
+            <properties>
+              <font name="Bradley Hand ITC" size="24" style="1"/>
+              <foreground color="-16579837"/>
+              <horizontalAlignment value="0"/>
+              <text value="Criteria Information"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="6dd6f" binding="leftPanel" layout-manager="GridLayoutManager" row-count="10" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints border-constraint="West"/>
+        <properties>
+          <background color="-11038572"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="ed905" class="javax.swing.JLabel" binding="furnishedEnableLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <foreground color="-16579837"/>
+              <text value="Furnished Enable"/>
+            </properties>
+          </component>
+          <component id="a178b" class="javax.swing.JLabel" binding="furnishedLabel">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <foreground color="-16579837"/>
+              <text value="Furnished"/>
+            </properties>
+          </component>
+          <component id="e9ecf" class="javax.swing.JLabel" binding="numberOfBathRoomsLabel">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <foreground color="-16579837"/>
+              <text value="Number of Bath Rooms"/>
+            </properties>
+          </component>
+          <component id="ee5b7" class="javax.swing.JLabel" binding="numberOfBedRoomsLabel">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <foreground color="-16579837"/>
+              <text value="Number of Bed Rooms"/>
+            </properties>
+          </component>
+          <component id="a831d" class="javax.swing.JLabel" binding="typeOfPropertyLabel">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <foreground color="-16579837"/>
+              <text value="Type of Property"/>
+            </properties>
+          </component>
+          <component id="e4e95" class="javax.swing.JLabel" binding="areaLabel">
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <foreground color="-16579837"/>
+              <text value="Area"/>
+            </properties>
+          </component>
+          <component id="8efe7" class="javax.swing.JLabel" binding="rentTermLabel">
+            <constraints>
+              <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <foreground color="-16579837"/>
+              <text value="Rent Term"/>
+            </properties>
+          </component>
+          <component id="b973a" class="javax.swing.JLabel" binding="rentAmountLabel">
+            <constraints>
+              <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <foreground color="-16579837"/>
+              <text value="Rent Amount"/>
+            </properties>
+          </component>
+          <component id="40625" class="javax.swing.JLabel" binding="cityQuadrantLabel">
+            <constraints>
+              <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <foreground color="-16579837"/>
+              <text value="City Quadrant"/>
+            </properties>
+          </component>
+          <component id="eef36" class="javax.swing.JLabel" binding="propertyIDLabel">
+            <constraints>
+              <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <foreground color="-16579837"/>
+              <text value="Property ID"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="fa2cd" binding="rightPanel" layout-manager="GridLayoutManager" row-count="10" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints border-constraint="East"/>
+        <properties>
+          <background color="-11038572"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="3557" class="javax.swing.JTextField" binding="furnishedEnableField">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1114369"/>
+            </properties>
+          </component>
+          <component id="b399c" class="javax.swing.JTextField" binding="furnishedField">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1114369"/>
+            </properties>
+          </component>
+          <component id="5c270" class="javax.swing.JTextField" binding="numBathRoomsField">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1114369"/>
+            </properties>
+          </component>
+          <component id="afe47" class="javax.swing.JTextField" binding="numBedRoomsField">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1114369"/>
+            </properties>
+          </component>
+          <component id="203e5" class="javax.swing.JTextField" binding="typePropertyField">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1114369"/>
+            </properties>
+          </component>
+          <component id="bc85b" class="javax.swing.JTextField" binding="areaField">
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1114369"/>
+            </properties>
+          </component>
+          <component id="4bd7a" class="javax.swing.JTextField" binding="rentTermField">
+            <constraints>
+              <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1114369"/>
+            </properties>
+          </component>
+          <component id="97337" class="javax.swing.JTextField" binding="rentAmountField">
+            <constraints>
+              <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1114369"/>
+            </properties>
+          </component>
+          <component id="cb369" class="javax.swing.JTextField" binding="cityQuadrantField">
+            <constraints>
+              <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1114369"/>
+            </properties>
+          </component>
+          <component id="205df" class="javax.swing.JTextField" binding="propertyIDField">
+            <constraints>
+              <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1114369"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="c2ef3" binding="bottomPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+        <constraints border-constraint="South"/>
+        <properties>
+          <background color="-11038572"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="485b4" class="javax.swing.JButton" binding="registerButton">
+            <constraints/>
+            <properties>
+              <text value="OK"/>
+            </properties>
+          </component>
+          <component id="2a1a6" class="javax.swing.JButton" binding="backButton">
+            <constraints/>
+            <properties>
+              <text value="Back"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>
