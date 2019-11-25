@@ -10,8 +10,9 @@ public class ManagerGUI {
     private JPanel titlePanel;
     private JPanel buttonPanel;
     private JLabel managerLabel;
-    private JButton viewLandlordButton;
+    private JButton viewPeopleButton;
     private JButton requestSummaryButton;
+    private JButton searchButton;
     private JFrame frame;
 
     public ManagerGUI() {
@@ -20,7 +21,8 @@ public class ManagerGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         requestSummaryButton.addActionListener(new ALReuestSummary());
-        viewLandlordButton.addActionListener(new ALViewLandLordButton());
+        viewPeopleButton.addActionListener(new ALViewPeople());
+        searchButton.addActionListener(new ALSearch());
         frame.setVisible(true);
     }
 
@@ -28,12 +30,13 @@ public class ManagerGUI {
         new ManagerGUI();
     }
 
-    private class ALViewLandLordButton implements ActionListener {
+
+    private class ALViewPeople implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             //TODO hook it up to the client;
             String send = "VIEWPEOPLE";
-            System.out.println("Send to Server");
+            System.out.println("Send to Server: " + send);
         }
     }
 
@@ -76,9 +79,9 @@ public class ManagerGUI {
         buttonPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         buttonPanel.setBackground(new Color(-11038572));
         panel1.add(buttonPanel, BorderLayout.CENTER);
-        viewLandlordButton = new JButton();
-        viewLandlordButton.setText("View Landlords");
-        buttonPanel.add(viewLandlordButton, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        viewPeopleButton = new JButton();
+        viewPeopleButton.setText("View Landlords");
+        buttonPanel.add(viewPeopleButton, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         requestSummaryButton = new JButton();
         requestSummaryButton.setText("Request Summary");
         buttonPanel.add(requestSummaryButton, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
