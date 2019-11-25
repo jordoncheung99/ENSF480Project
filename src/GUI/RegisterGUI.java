@@ -35,7 +35,8 @@ public class RegisterGUI {
     private JLabel usernameLabel;
     private JLabel passwordLabel;
     private JFrame frame;
-    public RegisterGUI(){
+
+    public RegisterGUI() {
         JFrame frame = new JFrame("Register");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -58,8 +59,7 @@ public class RegisterGUI {
             String country = countryField.getText();
             String postalCode = postalCodeField.getText();
 
-            Address address = new Address(street,city,province,country,postalCode);
-
+            Address address = new Address(street, city, province, country, postalCode);
 
 
         }
@@ -204,4 +204,5 @@ public class RegisterGUI {
     public JComponent $$$getRootComponent$$$() {
         return panel1;
     }
+
 }

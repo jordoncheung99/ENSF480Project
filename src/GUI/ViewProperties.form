@@ -34,7 +34,13 @@
         </properties>
         <border type="none"/>
         <children>
-          <component id="5b65a" class="javax.swing.JButton" binding="criteriaCreateField">
+          <component id="9622b" class="javax.swing.JButton" binding="emailButton">
+            <constraints/>
+            <properties>
+              <text value="Email"/>
+            </properties>
+          </component>
+          <component id="5b65a" class="javax.swing.JButton" binding="criteriaCreateButton">
             <constraints/>
             <properties>
               <text value="criteriaCreate"/>
@@ -48,15 +54,10 @@
           </component>
         </children>
       </grid>
-      <scrollpane id="a74ac">
+      <component id="90611" class="javax.swing.JList" binding="displayList">
         <constraints border-constraint="Center"/>
-        <properties>
-          <background color="-1114369"/>
-          <verticalScrollBarPolicy value="22"/>
-        </properties>
-        <border type="none"/>
-        <children/>
-      </scrollpane>
+        <properties/>
+      </component>
     </children>
   </grid>
 </form>

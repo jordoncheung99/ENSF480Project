@@ -1,23 +1,74 @@
 package GUI;
 
+import Server.Address;
+import Server.Property;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class ViewProperties {
     private JPanel panel1;
     private JPanel titlePanel;
     private JPanel buttonPanel;
-    private JButton criteriaCreateField;
+    private JButton criteriaCreateButton;
     private JButton backButton;
+    private JButton emailButton;
+    private JList displayList;
     private JFrame frame;
 
+    ArrayList<Property> properties;
 
-    public ViewProperties(){
-        JFrame frame = new JFrame("Manger");
+    public ViewProperties() {
+        frame = new JFrame("Manger");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
+        backButton.addActionListener(new ALBack());
+        emailButton.addActionListener(new ALEmail());
+        criteriaCreateButton.addActionListener(new ALCreateCriteria());
+        properties = new ArrayList<>();
+
+        //Fill in data
+
+
         frame.setVisible(true);
+    }
+
+    private class ALBack implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            frame.dispose();
+        }
+    }
+
+    private class ALEmail implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println(displayList.getSelectedIndex());
+
+        }
+    }
+
+    private class ALCreateCriteria implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            //TODO MOVE TO CRETIERA FORM
+            Property[] temp = new Property[properties.size()];
+            properties.add(new Property(100, 200, 300, 400, 500, true, new Address("yes", "no", "maybe", "so", "what"), "GARBAGE", 10, true, true, true, null, null));
+            System.out.println(temp.length);
+            for (int i = 0; i < properties.size(); i++) {
+                temp[i] = properties.get(i);
+            }
+            displayList = new JList(temp);
+            panel1.add(displayList);
+            System.out.println("help");
+        }
     }
 
     {
@@ -51,19 +102,17 @@ public class ViewProperties {
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         buttonPanel.setBackground(new Color(-11038572));
         panel1.add(buttonPanel, BorderLayout.SOUTH);
-        postButton = new JButton();
-        postButton.setText("Post Property");
-        buttonPanel.add(postButton);
-        criteriaCreateField = new JButton();
-        criteriaCreateField.setText("Edit Property");
-        buttonPanel.add(criteriaCreateField);
+        emailButton = new JButton();
+        emailButton.setText("Email");
+        buttonPanel.add(emailButton);
+        criteriaCreateButton = new JButton();
+        criteriaCreateButton.setText("criteriaCreate");
+        buttonPanel.add(criteriaCreateButton);
         backButton = new JButton();
         backButton.setText("Back");
         buttonPanel.add(backButton);
-        final JScrollPane scrollPane1 = new JScrollPane();
-        scrollPane1.setBackground(new Color(-1114369));
-        scrollPane1.setVerticalScrollBarPolicy(22);
-        panel1.add(scrollPane1, BorderLayout.CENTER);
+        displayList = new JList();
+        panel1.add(displayList, BorderLayout.CENTER);
     }
 
     /**
@@ -91,4 +140,5 @@ public class ViewProperties {
     public JComponent $$$getRootComponent$$$() {
         return panel1;
     }
+
 }
