@@ -164,24 +164,37 @@ public class TestCommunicator implements Runnable{
                     break;
             }
         }
-        while (true){
+    }
+
+    private void renterHandler() throws IOException {
+        validCommands.add(new SearchHandler(socketIn,socketOut));
+        validCommands.add(new EmailHandler(socketIn,socketOut));
+        sendString("Enter SEARCH to search");
+        sendString("Enter EMAIL to send an email");
+        while(true) {
             String input = socketIn.readLine();
             for (int i = 0; i < validCommands.size(); i++){
-                if (validCommands.get(i).doTask(input,rpms,"")){
+                if (validCommands.get(i).doTask(input,rpms,"null")){
                     break;
                 }
             }
         }
     }
 
-    private void renterHandler(){
+    private void regRentHandler(MySQLDatabase database) throws IOException {
         validCommands.add(new SearchHandler(socketIn,socketOut));
         validCommands.add(new EmailHandler(socketIn,socketOut));
-    }
-
-    private void regRentHandler(MySQLDatabase database){
-        validCommands.add(new SearchHandler(socketIn,socketOut));
-        validCommands.add(new EmailHandler(socketIn,socketOut));
+        Renter user = new Renter(database, client.username);
+        sendString("Enter SEARCH to search");
+        sendString("Enter EMAIL to send an email");
+        while(true) {
+            String input = socketIn.readLine();
+            for (int i = 0; i < validCommands.size(); i++){
+                if (validCommands.get(i).doTask(input,rpms,client.username)){
+                    break;
+                }
+            }
+        }
     }
 
     private void landLordHandler(MySQLDatabase database) throws IOException {
@@ -228,6 +241,8 @@ public class TestCommunicator implements Runnable{
         validCommands.add(new ChangeFeeHandler(socketIn,socketOut));
         Manager user = new Manager(client.username);
         sendString("Enter 'MODIFY' to change a property");
+        sendString("Enter 'SEARCH' to search");
+        sendString("Enter 'REPORT' to generate report");
         sendString("Enter 'VIEWPEOPLE' to view all landlords and renters");
         sendString("Enter 'CHANGEFEE' to alter fee amount and period");
         while(true) {

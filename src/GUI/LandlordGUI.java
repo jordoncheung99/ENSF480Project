@@ -1,6 +1,6 @@
 package GUI;
 
-import Server.LandLord;
+import Server.Property;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,10 +13,11 @@ public class LandlordGUI {
     private JPanel buttonPanel;
     private JLabel titleLabel;
     private JButton registerPropertyButton;
-    private JButton viewRegisteredProperties;
-    private JButton logoffButton;
+    private JButton searchButton;
     private JButton payFeeButton;
     private JButton editPropertyButton;
+
+    private LandlordRegisterPropertyGUI regForm;
 
     public LandlordGUI() {
         JFrame frame = new JFrame("Hell");
@@ -26,11 +27,54 @@ public class LandlordGUI {
 
         registerPropertyButton.addActionListener(new ALOpenRegisterPropertyForm());
         payFeeButton.addActionListener(new ALFee());
+        searchButton.addActionListener(new ALSearch());
+        editPropertyButton.addActionListener(new ALEdit());
         frame.setVisible(true);
     }
 
+
     public static void main(String args[]) {
         LandlordGUI g = new LandlordGUI();
+    }
+
+
+    private class ALOpenRegisterPropertyForm implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            regForm = new LandlordRegisterPropertyGUI(new ALRegisterProperty());
+        }
+    }
+
+    private class ALRegisterProperty implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Property prop = regForm.pullProperty();
+            if (prop != null) {
+                String send = "ADD#" + prop.toServerString();
+                System.out.println(send);
+            }
+        }
+    }
+
+    private class ALModifyProperty implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Property prop = regForm.pullProperty();
+            if (prop != null) {
+                String send = "MODIFY#" + prop.getListID() + "#" + prop.toServerString();
+                System.out.println(send);
+            }
+        }
+    }
+
+    private class ALEdit implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            regForm = new LandlordRegisterPropertyGUI(new ALModifyProperty());
+        }
     }
 
     private class ALFee implements ActionListener {
@@ -70,18 +114,15 @@ public class LandlordGUI {
         titleLabel.setText("Landlord Page");
         titlePanel.add(titleLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonPanel = new JPanel();
-        buttonPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(5, 1, new Insets(0, 0, 0, 0), -1, -1));
+        buttonPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 1, new Insets(0, 0, 0, 0), -1, -1));
         buttonPanel.setBackground(new Color(-11038572));
         panel1.add(buttonPanel, BorderLayout.CENTER);
         registerPropertyButton = new JButton();
         registerPropertyButton.setText("Register Property");
         buttonPanel.add(registerPropertyButton, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        viewRegisteredProperties = new JButton();
-        viewRegisteredProperties.setText("View Registered Properties");
-        buttonPanel.add(viewRegisteredProperties, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        logoffButton = new JButton();
-        logoffButton.setText("Log Out");
-        buttonPanel.add(logoffButton, new com.intellij.uiDesigner.core.GridConstraints(4, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        searchButton = new JButton();
+        searchButton.setText("Search");
+        buttonPanel.add(searchButton, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         payFeeButton = new JButton();
         payFeeButton.setText("Pay Fee");
         buttonPanel.add(payFeeButton, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));

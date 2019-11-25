@@ -16,7 +16,7 @@ public class EmailHandler extends Handler {
         }
         String parts[] = input.split("#");
         int propID = Integer.parseInt(parts[1]);
-        sendString(rpms.email(propID,parts[2]));
+        sendString(rpms.email(propID,parts[2], username));
         return true;
     }
 }

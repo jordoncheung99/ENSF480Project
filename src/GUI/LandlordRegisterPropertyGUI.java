@@ -27,18 +27,20 @@ public class LandlordRegisterPropertyGUI {
     private JTextField countryField;
     private JTextField postalCodeField;
     private JTextField typeOfPropertyField;
+    private JTextField PropID;
 
     private JFrame frame;
 
-    LandlordRegisterPropertyGUI() {
+    LandlordRegisterPropertyGUI(ActionListener alRegister) {
         frame = new JFrame("RegisterForm");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
-        registerButton.addActionListener(new ALRegister());
+        registerButton.addActionListener(alRegister);
         backButton.addActionListener(new ALBack());
         frame.setVisible(true);
     }
+
 
     private class ALBack implements ActionListener {
 
@@ -48,77 +50,81 @@ public class LandlordRegisterPropertyGUI {
         }
     }
 
+    public void dispose() {
+        frame.dispose();
+    }
 
-    private class ALRegister implements ActionListener {
+    public Property pullProperty() {
+        String street = streetField.getText();
+        String city = cityField.getText();
+        String province = provinceField.getText();
+        String country = countryField.getText();
+        String postalCode = postalCodeField.getText();
+        boolean worked = true;
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String street = streetField.getText();
-            String city = cityField.getText();
-            String province = provinceField.getText();
-            String country = countryField.getText();
-            String postalCode = postalCodeField.getText();
-            boolean worked = true;
+        Address address = new Address(street, city, province, country, postalCode);
 
-            Address address = new Address(street, city, province, country, postalCode);
+        float rentAmmount = 0;
+        float rentTerm = 0;
+        float area = 0;
+        int numOfBedRooms = 0;
+        int numOfBathRooms = 0;
+        boolean furnished = false;
+        String typeOfProperty = null;
+        int listID = 0;
 
-            float rentAmmount = 0;
-            float rentTerm = 0;
-            float area = 0;
-            int numOfBedRooms = 0;
-            int numOfBathRooms = 0;
-            boolean furnished = false;
-            String typeOfProperty = null;
-            int listID = 0;
-
-            try {
-                rentAmmount = Float.parseFloat(rentAmmountField.getText());
-            } catch (NumberFormatException exp) {
-                System.out.println("The rent amount isn't a float.");
-                worked = false;
-            }
-
-            try {
-                rentTerm = Float.parseFloat(rentTermField.getText());
-            } catch (NumberFormatException exp) {
-                System.out.println("The rent amount isn't a float.");
-                worked = false;
-            }
-
-            try {
-                area = Float.parseFloat(areaField.getText());
-            } catch (NumberFormatException exp) {
-                System.out.println("The area isn't a float.");
-                worked = false;
-            }
-
-            try {
-                numOfBathRooms = Integer.parseInt(numOfBathRoomsField.getText());
-            } catch (NumberFormatException exp) {
-                System.out.println("Number of bathrooms isn't an int");
-                worked = false;
-            }
-
-            try {
-                numOfBedRooms = Integer.parseInt(numOfBedRoomsField.getText());
-            } catch (NumberFormatException exp) {
-                System.out.println("Number of bedrooms isn't an int");
-                worked = false;
-            }
-
-            furnished = FurnishedBox.isSelected();
-            typeOfProperty = typeOfPropertyField.getText();
-
-
-            if (worked) {
-                Property property = new Property(rentAmmount, rentTerm, area, numOfBathRooms, numOfBedRooms, furnished, address, typeOfProperty, listID, false, false, false, null, null);
-                //TODO actually send it to the server to be processed
-                String send = "ADD" + property.toServerString();
-                System.out.println(send);
-                frame.dispose();
-            }
-
+        try {
+            rentAmmount = Float.parseFloat(rentAmmountField.getText());
+        } catch (NumberFormatException exp) {
+            System.out.println("The rent amount isn't a float.");
+            worked = false;
         }
+
+        try {
+            rentTerm = Float.parseFloat(rentTermField.getText());
+        } catch (NumberFormatException exp) {
+            System.out.println("The rent amount isn't a float.");
+            worked = false;
+        }
+
+        try {
+            area = Float.parseFloat(areaField.getText());
+        } catch (NumberFormatException exp) {
+            System.out.println("The area isn't a float.");
+            worked = false;
+        }
+
+        try {
+            numOfBathRooms = Integer.parseInt(numOfBathRoomsField.getText());
+        } catch (NumberFormatException exp) {
+            System.out.println("Number of bathrooms isn't an int");
+            worked = false;
+        }
+
+        try {
+            numOfBedRooms = Integer.parseInt(numOfBedRoomsField.getText());
+        } catch (NumberFormatException exp) {
+            System.out.println("Number of bedrooms isn't an int");
+            worked = false;
+        }
+
+        furnished = FurnishedBox.isSelected();
+        typeOfProperty = typeOfPropertyField.getText();
+
+        int propID = 0;
+        try {
+            propID = Integer.parseInt(PropID.getText());
+        } catch (NumberFormatException exp) {
+            System.out.println("Prop ID isn't an int");
+            worked = false;
+        }
+
+        if (worked) {
+            Property property = new Property(rentAmmount, rentTerm, area, numOfBathRooms, numOfBedRooms, furnished, address, typeOfProperty, listID, false, false, false, null, null);
+            frame.dispose();
+            return property;
+        }
+        return null;
     }
 
 
@@ -160,7 +166,7 @@ public class LandlordRegisterPropertyGUI {
         backButton.setText("Back");
         buttonPanel.add(backButton);
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(12, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(13, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel2, BorderLayout.CENTER);
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
@@ -246,7 +252,7 @@ public class LandlordRegisterPropertyGUI {
         panel12.add(countryField, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JPanel panel13 = new JPanel();
         panel13.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
-        panel2.add(panel13, new com.intellij.uiDesigner.core.GridConstraints(11, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel2.add(panel13, new com.intellij.uiDesigner.core.GridConstraints(12, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label12 = new JLabel();
         label12.setText("Type Of Property");
         panel13.add(label12, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -260,6 +266,14 @@ public class LandlordRegisterPropertyGUI {
         panel14.add(label13, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         postalCodeField = new JTextField();
         panel14.add(postalCodeField, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        final JPanel panel15 = new JPanel();
+        panel15.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel2.add(panel15, new com.intellij.uiDesigner.core.GridConstraints(11, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final JLabel label14 = new JLabel();
+        label14.setText("PropID");
+        panel15.add(label14, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        PropID = new JTextField();
+        panel15.add(PropID, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
     }
 
     /**

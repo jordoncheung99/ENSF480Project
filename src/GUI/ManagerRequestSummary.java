@@ -1,5 +1,7 @@
 package GUI;
 
+import Server.Property;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -48,6 +50,8 @@ public class ManagerRequestSummary {
 
             String send = "REPORT#" + startTime + "#" + endTime;
             System.out.println("Route to server: " + send);
+            //TODO work with server, assume we get back shit
+
         }
     }
 

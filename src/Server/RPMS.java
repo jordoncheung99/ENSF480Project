@@ -4,6 +4,10 @@ import java.sql.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
 
 public class RPMS {
     private int periodOfFees;
@@ -45,7 +49,8 @@ public class RPMS {
         filter = new BureFroceFilter();
     }
 
-    public ArrayList<Property> filterSearch(ArrayList<Criteria> criteria){
+    public ArrayList<Property> filterSearch(Criteria criteria) {
+        listing.loadDataBase();
         return filter.Filter(listing,criteria);
     }
 
@@ -296,9 +301,59 @@ public class RPMS {
      * @param message the email body
      * @return success/error message
      */
-    public String email(int propID, String message){
+    public String email(int propID, String message, String username){
+        String to = "";
+        Connection conn;
+        PreparedStatement state;
+        conn = database.getConnection();
+        String password;
+        try {
+            state = conn.prepareStatement("SELECT landlord FROM property WHERE listID = ?");
+            state.setInt(1, propID);
+            ResultSet resSet = state.executeQuery();
+            resSet.next();
+            to = resSet.getString("landlord");
+            state = conn.prepareStatement("SELECT * FROM person WHERE Uname = ?");
+            state.setString(1, username);
+            resSet = state.executeQuery();
+            resSet.next();
+            password = resSet.getString("Pass");
+            System.out.println(username + " " + password);
 
-        //TODO implement emailing system, Guess it can be a string just print to terminal
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true"); //TLS
+
+        Session session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+        try {
+
+            Message emailMessage = new MimeMessage(session);
+            emailMessage.setFrom(new InternetAddress(username));
+            emailMessage.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(to)
+            );
+            emailMessage.setSubject("RPMS Inquiry About Property With ID: " + propID);
+            emailMessage.setText(message);
+
+            Transport.send(emailMessage);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
         return "Email Sent";
     }
 

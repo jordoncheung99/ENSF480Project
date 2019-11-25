@@ -60,7 +60,7 @@ public class RegisterGUI {
             String postalCode = postalCodeField.getText();
 
             Address address = new Address(street, city, province, country, postalCode);
-
+            System.out.println(address);
 
         }
     }
