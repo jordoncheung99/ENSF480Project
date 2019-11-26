@@ -40,6 +40,7 @@ public class LandlordGUI {
         frame.setVisible(true);
     }
 
+
     private class ALOpenRegisterPropertyForm implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI.RenterSelectPropertyGUI">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI.EmailBodyGUI">
   <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
       <xy x="20" y="20" width="500" height="400"/>
@@ -22,7 +22,7 @@
             <properties>
               <font name="Bradley Hand ITC" size="24" style="1"/>
               <foreground color="-16579837"/>
-              <text value="Select a Property"/>
+              <text value="Email Body"/>
             </properties>
           </component>
         </children>
@@ -62,7 +62,12 @@
               <verticalScrollBarPolicy value="22"/>
             </properties>
             <border type="none"/>
-            <children/>
+            <children>
+              <component id="525c2" class="javax.swing.JTextArea" binding="emailBodyField">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
           </scrollpane>
         </children>
       </grid>

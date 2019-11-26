@@ -1,4 +1,4 @@
-package Server;
+package GUI;
 
 public class Criteria {
     //Use -1 or null as don't care.

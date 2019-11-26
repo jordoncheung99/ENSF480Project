@@ -95,13 +95,27 @@ public class RPMS {
 
     public String modifyListing(int propertyID, Property property, String username){
         //TODO: Fix the landlord.
+        boolean managers = false;
+        boolean landlords = false;
         try {
             Connection conn = database.getConnection();
-            PreparedStatement state = conn.prepareStatement("SELECT * FROM property WHERE listID = ? AND landlord = ?");
+            PreparedStatement state = conn.prepareStatement("SELECT * FROM property WHERE listID = ?");
             state.setInt(1, propertyID);
-            state.setString(2, username);
             ResultSet landlordSet = state.executeQuery();
-            if(landlordSet.next()) {
+            landlords = landlordSet.next();
+            if(landlords){
+                System.out.println(landlordSet.getString("landlord").length() + " " + username.length());
+                landlords = (landlordSet.getString("landlord").trim().equals(username.trim()));
+            }
+            System.out.println(landlords);
+            state = conn.prepareStatement("SELECT * FROM person WHERE Uname = ?");
+            state.setString(1, username);
+            ResultSet managerSet = state.executeQuery();
+            managers = managerSet.next();
+            if(managers) {
+                managers = (managerSet.getString("PersonRole").trim().equals("MANAGER".trim()));
+            }
+            if(landlords || managers) {
                 listing.modifyProperty(propertyID, property);
                 state = conn.prepareStatement("UPDATE Property SET landlord = ?, area = ?, rentAmount = ?, rentTerm = ?, numOfBedRooms = ?, numOfBathRooms = ?, address = ?, typeOfProperty = ?, active = ?, rented = ?, suspended = ?, dateRented = ?, datePaid = ?, furnished = ? WHERE listID = ?");
                 state.setString(1, username);
@@ -345,6 +359,7 @@ public class RPMS {
     }
 
     public String email(int propID, String message, String username, String password){
+        System.out.println("Hello There");
         String to = "";
         Connection conn;
         PreparedStatement state;

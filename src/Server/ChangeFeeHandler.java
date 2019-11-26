@@ -15,6 +15,7 @@ public class ChangeFeeHandler extends Handler {
             return false;
         }
         String[] parts = input.split("#");
+        System.out.println(input);
         float feeAmmout = Float.parseFloat(parts[1]);
         int feePeriod = Integer.parseInt(parts[2]);
         rpms.setFeeAmmount(feeAmmout);

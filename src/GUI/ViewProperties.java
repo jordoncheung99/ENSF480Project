@@ -23,20 +23,21 @@ public class ViewProperties {
     private JList displayList;
     private JFrame frame;
     private CriteriaGUI criteriaGUI;
+    private EmailBodyGUI emailBodyGUI;
 
-    ArrayList<Property> properties;
+    ArrayList<Property> propertiesArray;
     private PrintWriter outBuffer;
     private BufferedReader inBuffer;
 
     public ViewProperties(PrintWriter outBuffer, BufferedReader inBuffer) {
-        frame = new JFrame("Manger");
+        frame = new JFrame("Prop Viewer");
         frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         backButton.addActionListener(new ALBack());
-        emailButton.addActionListener(new ALEmail());
+        emailButton.addActionListener(new ALOpenEmail());
         criteriaCreateButton.addActionListener(new ALCreateCriteria());
-        properties = new ArrayList<>();
+        propertiesArray = new ArrayList<>();
         this.outBuffer = outBuffer;
         this.inBuffer = inBuffer;
 
@@ -53,6 +54,14 @@ public class ViewProperties {
         }
     }
 
+    private class ALOpenEmail implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            emailBodyGUI = new EmailBodyGUI(outBuffer, inBuffer, new ALEmail());
+        }
+    }
+
     private class ALEmail implements ActionListener {
 
         @Override
@@ -60,11 +69,21 @@ public class ViewProperties {
             int slectedIndex = displayList.getSelectedIndex();
             int propID = -1;
             if (slectedIndex >= 0) {
-                propID = properties.get(slectedIndex).getListID();
+                propID = propertiesArray.get(slectedIndex).getListID();
             }
             //TODO work with the client
-            if (propID < 0) {
-                System.out.println("Email to " + propID);
+            System.out.println(propID);
+            if (propID >= 0) {
+                String send = "EMAIL#" + propID + "#" + emailBodyGUI.pullBody();
+                outBuffer.println(send);
+                System.out.println("sent: " + send);
+                try {
+                    System.out.println(Client.readServer(inBuffer));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
@@ -82,25 +101,39 @@ public class ViewProperties {
 
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
+
+
             Criteria criteria = criteriaGUI.pullCriteria();
 
-            outBuffer.println(criteria.toServerString());
-            String[] parts = new String[0];
-            try {
-                parts = Client.readServer(inBuffer).split("#");
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Property properties[] = new Property[parts.length];
-            for (int i = 0; i < parts.length; i++) {
-                properties[i] = new Property(parts[i]);
-            }
-            panel1.remove(displayList);
-            displayList = new JList(properties);
-            panel1.add(displayList);
+            if (criteria != null) {
 
+                outBuffer.println("SEARCH#" + criteria.toServerString());
+                System.out.println(criteria.toServerString());
+                String[] parts = new String[0];
+                try {
+                    parts = Client.readServer(inBuffer).split("#");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                Property properties[] = new Property[parts.length];
+                propertiesArray.clear();
+                for (int i = 0; i < parts.length; i++) {
+                    if (parts[i].length() < 10) {
+                        continue;
+                    }
+                    if (parts[i].length() != 0) {
+                        properties[i] = new Property(parts[i]);
+                        propertiesArray.add(properties[i]);
+                    }
+                }
+                panel1.remove(displayList);
+                displayList = new JList(properties);
+                panel1.add(displayList);
+
+            }
         }
     }
 

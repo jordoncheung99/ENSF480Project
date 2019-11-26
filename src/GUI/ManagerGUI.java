@@ -32,8 +32,19 @@ public class ManagerGUI {
         requestSummaryButton.addActionListener(new ALReuestSummary());
         viewPeopleButton.addActionListener(new ALViewPeople());
         searchButton.addActionListener(new ALSearch(outBuffer, inBuffer));
+        changeFeeButton.addActionListener(new ALOpenFeeChange());
+
         frame.setVisible(true);
     }
+
+    private class ALOpenFeeChange implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            new FeeChange(outBuffer, inBuffer);
+        }
+    }
+
 
 
     private class ALViewPeople implements ActionListener {

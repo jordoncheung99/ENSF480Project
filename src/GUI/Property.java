@@ -1,4 +1,6 @@
-package Server;
+package GUI;
+
+import Server.Address;
 
 import java.util.Date;
 

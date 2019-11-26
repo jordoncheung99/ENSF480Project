@@ -7,6 +7,7 @@ package GUI;/*
 
 
 import Server.Manager;
+import Server.Renter;
 
 import java.io.*;
 import java.net.Socket;
@@ -73,9 +74,9 @@ class Client {
 		}else if(input.contains("MANAGER")){
 			ManagerGUI gui = new ManagerGUI(outBuffer, inBuffer);
 		}else if (input.contains("RENTER")){
-			System.out.println("REGRENTER");
+			RenterGUI gui = new RenterGUI(outBuffer,inBuffer);
 		}else if (input.contains("RENT")){
-			System.out.println("Normie");
+			RenterGUI gui = new RenterGUI(outBuffer,inBuffer);
 		}
 	}
 

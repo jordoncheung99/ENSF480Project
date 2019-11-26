@@ -111,9 +111,8 @@ public class LandlordRegisterPropertyGUI {
         furnished = FurnishedBox.isSelected();
         typeOfProperty = typeOfPropertyField.getText();
 
-        int propID = 0;
         try {
-            propID = Integer.parseInt(PropID.getText());
+            listID = Integer.parseInt(PropID.getText());
         } catch (NumberFormatException exp) {
             System.out.println("Prop ID isn't an int");
             worked = false;

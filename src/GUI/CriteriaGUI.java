@@ -53,10 +53,10 @@ public class CriteriaGUI {
     public Criteria pullCriteria() {
         boolean worked = true;
 
-        boolean furnishedEnable;
-        try{
+        boolean furnishedEnable = false;
+        try {
             furnishedEnable = Boolean.parseBoolean(furnishedEnableField.getText());
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             System.out.println("Furnished Enable is not a boolean");
             worked = false;
         }
@@ -73,17 +73,22 @@ public class CriteriaGUI {
         String[] propertyIDArray = propertyID.split(" ");
         int[] propertyIDIntegers = new int[propertyIDArray.length];
 
-        try{
-            for (int i = 0; i < propertyIDIntegers.length; i++) {
-                propertyIDIntegers[i] = Integer.parseInt(propertyIDArray[i]);
+        try {
+            System.out.println(propertyIDArray[0]);
+            if (propertyIDArray[0].equalsIgnoreCase("null")) {
+                propertyIDIntegers = null;
+            } else {
+                for (int i = 0; i < propertyIDIntegers.length; i++) {
+                    propertyIDIntegers[i] = Integer.parseInt(propertyIDArray[i]);
+                }
             }
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             System.out.println("Property ID are not ints");
             worked = false;
         }
 
-        if(worked){
-            Criteria criteria = new Criteria(Boolean.parseBoolean(furnishedEnable), Boolean.parseBoolean(furnished),
+        if (worked) {
+            Criteria criteria = new Criteria(furnishedEnable, Boolean.parseBoolean(furnished),
                     Integer.parseInt(numBathRooms), Integer.parseInt(numBedRooms), typeProperty.split(" "), Float.parseFloat(area),
                     Float.parseFloat(rentTerm), Float.parseFloat(rentAmount), cityQuadrant.split(" "), propertyIDIntegers);
             frame.dispose();
