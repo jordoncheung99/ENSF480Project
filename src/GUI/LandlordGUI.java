@@ -31,19 +31,13 @@ public class LandlordGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
 
+        this.outBuffer = outBuffer;
+        this.inBuffer = inBuffer;
         registerPropertyButton.addActionListener(new ALOpenRegisterPropertyForm());
         payFeeButton.addActionListener(new ALFee());
-        searchButton.addActionListener(new ALSearch());
+        searchButton.addActionListener(new ALSearch(outBuffer, inBuffer));
         editPropertyButton.addActionListener(new ALEdit());
         frame.setVisible(true);
-        outBuffer.println("ADD");
-        System.out.println("It send a thing");
-        try {
-            System.out.println(Client.readServer(inBuffer));
-        } catch (IOException | InterruptedException e) {
-
-        }
-
     }
 
     private class ALOpenRegisterPropertyForm implements ActionListener {
@@ -60,7 +54,12 @@ public class LandlordGUI {
             Property prop = regForm.pullProperty();
             if (prop != null) {
                 String send = "ADD#" + prop.toServerString();
-                System.out.println(send);
+                outBuffer.println(send);
+                try {
+                    System.out.println(Client.readServer(inBuffer));
+                } catch (IOException | InterruptedException exp) {
+
+                }
             }
         }
     }
@@ -72,7 +71,12 @@ public class LandlordGUI {
             Property prop = regForm.pullProperty();
             if (prop != null) {
                 String send = "MODIFY#" + prop.getListID() + "#" + prop.toServerString();
-                System.out.println(send);
+                outBuffer.println(send);
+                try {
+                    System.out.println(Client.readServer(inBuffer));
+                } catch (IOException | InterruptedException exp) {
+
+                }
             }
         }
     }
@@ -89,7 +93,7 @@ public class LandlordGUI {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            new LandlordMakePaymentGUI();
+            new LandlordMakePaymentGUI(outBuffer, inBuffer);
         }
     }
 

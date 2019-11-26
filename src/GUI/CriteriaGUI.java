@@ -40,20 +40,57 @@ public class CriteriaGUI {
     private JTextField propertyIDField;
     JFrame frame;
 
-    public static void main(String args[]) {
-        CriteriaGUI crit = new CriteriaGUI();
-    }
-
-
-    public CriteriaGUI() {
+    public CriteriaGUI(ActionListener registerAL) {
         frame = new JFrame("Hell");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-
-        registerButton.addActionListener(new ALOpenRegisterCriteriaForm());
+        registerButton.addActionListener(registerAL);
         backButton.addActionListener(new ALBack());
         frame.setVisible(true);
+    }
+
+    public Criteria pullCriteria() {
+        boolean worked = true;
+
+        boolean furnishedEnable;
+        try{
+            furnishedEnable = Boolean.parseBoolean(furnishedEnableField.getText());
+        }catch(NumberFormatException e){
+            System.out.println("Furnished Enable is not a boolean");
+            worked = false;
+        }
+        String furnished = furnishedField.getText();
+        String numBathRooms = numBathRoomsField.getText();
+        String numBedRooms = numBedRoomsField.getText();
+        String typeProperty = typePropertyField.getText();
+        String area = areaField.getText();
+        String rentTerm = rentTermField.getText();
+        String rentAmount = rentAmountField.getText();
+        String cityQuadrant = cityQuadrantField.getText();
+        String propertyID = propertyIDField.getText();
+
+        String[] propertyIDArray = propertyID.split(" ");
+        int[] propertyIDIntegers = new int[propertyIDArray.length];
+
+        try{
+            for (int i = 0; i < propertyIDIntegers.length; i++) {
+                propertyIDIntegers[i] = Integer.parseInt(propertyIDArray[i]);
+            }
+        }catch(NumberFormatException e){
+            System.out.println("Property ID are not ints");
+            worked = false;
+        }
+
+        if(worked){
+            Criteria criteria = new Criteria(Boolean.parseBoolean(furnishedEnable), Boolean.parseBoolean(furnished),
+                    Integer.parseInt(numBathRooms), Integer.parseInt(numBedRooms), typeProperty.split(" "), Float.parseFloat(area),
+                    Float.parseFloat(rentTerm), Float.parseFloat(rentAmount), cityQuadrant.split(" "), propertyIDIntegers);
+            frame.dispose();
+
+            return criteria;
+        }
+        return null;
     }
 
     {
@@ -201,33 +238,6 @@ public class CriteriaGUI {
         return panel1;
     }
 
-    private class ALOpenRegisterCriteriaForm implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String furnishedEnable = furnishedEnableField.getText();
-            String furnished = furnishedField.getText();
-            String numBathRooms = numBathRoomsField.getText();
-            String numBedRooms = numBedRoomsField.getText();
-            String typeProperty = typePropertyField.getText();
-            String area = areaField.getText();
-            String rentTerm = rentTermField.getText();
-            String rentAmount = rentAmountField.getText();
-            String cityQuadrant = cityQuadrantField.getText();
-            String propertyID = propertyIDField.getText();
-
-            String[] propertyIDArray = propertyID.split(" ");
-            int[] propertyIDIntegers = new int[propertyIDArray.length];
-
-            for (int i = 0; i < propertyIDIntegers.length; i++) {
-                propertyIDIntegers[i] = Integer.parseInt(propertyIDArray[i]);
-            }
-
-            Criteria criteria = new Criteria(Boolean.parseBoolean(furnishedEnable), Boolean.parseBoolean(furnished),
-                    Integer.parseInt(numBathRooms), Integer.parseInt(numBedRooms), typeProperty.split(" "), Float.parseFloat(area),
-                    Float.parseFloat(rentTerm), Float.parseFloat(rentAmount), cityQuadrant.split(" "), propertyIDIntegers);
-        }
-    }
 
     private class ALBack implements ActionListener {
 

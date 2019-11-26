@@ -83,7 +83,7 @@ public class Property {
 
     public Date getDatePaid() { return datePaid; }
 
-    Property(String input){
+    public Property(String input){
         String[] parts = input.split("&");
         rentAmmount = Float.parseFloat(parts[0]);
         rentTerm = Float.parseFloat(parts[1]);

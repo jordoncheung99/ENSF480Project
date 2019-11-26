@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class ManagerGUI {
     private JPanel panel1;
@@ -13,21 +16,23 @@ public class ManagerGUI {
     private JButton viewPeopleButton;
     private JButton requestSummaryButton;
     private JButton searchButton;
+    private JButton changeFeeButton;
     private JFrame frame;
 
-    public ManagerGUI() {
+    private PrintWriter outBuffer;
+    private BufferedReader inBuffer;
+
+    public ManagerGUI(PrintWriter outBuffer, BufferedReader inBuffer) {
         JFrame frame = new JFrame("Manger");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
+        this.outBuffer = outBuffer;
+        this.inBuffer = inBuffer;
         requestSummaryButton.addActionListener(new ALReuestSummary());
         viewPeopleButton.addActionListener(new ALViewPeople());
-        searchButton.addActionListener(new ALSearch());
+        searchButton.addActionListener(new ALSearch(outBuffer, inBuffer));
         frame.setVisible(true);
-    }
-
-    public static void main(String argsp[]) {
-        new ManagerGUI();
     }
 
 
@@ -36,9 +41,16 @@ public class ManagerGUI {
         public void actionPerformed(ActionEvent e) {
             //TODO hook it up to the client;
             String send = "VIEWPEOPLE";
-            System.out.println("Send to Server: " + send);
-            String test = "Y#M#C#A";
-            new ManagerViewPeopleGUI(test);
+            outBuffer.println(send);
+            String list = "";
+            try {
+                list = Client.readServer(inBuffer);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            new ManagerViewPeopleGUI(list);
         }
     }
 
@@ -46,7 +58,7 @@ public class ManagerGUI {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            ManagerRequestSummary summary = new ManagerRequestSummary();
+            ManagerRequestSummary summary = new ManagerRequestSummary(outBuffer, inBuffer);
         }
     }
 
@@ -78,7 +90,7 @@ public class ManagerGUI {
         managerLabel.setText("Manager Page");
         titlePanel.add(managerLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonPanel = new JPanel();
-        buttonPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        buttonPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 1, new Insets(0, 0, 0, 0), -1, -1));
         buttonPanel.setBackground(new Color(-11038572));
         panel1.add(buttonPanel, BorderLayout.CENTER);
         viewPeopleButton = new JButton();
@@ -86,10 +98,13 @@ public class ManagerGUI {
         buttonPanel.add(viewPeopleButton, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         requestSummaryButton = new JButton();
         requestSummaryButton.setText("Request Summary");
-        buttonPanel.add(requestSummaryButton, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        buttonPanel.add(requestSummaryButton, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         searchButton = new JButton();
         searchButton.setText("Search");
         buttonPanel.add(searchButton, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        changeFeeButton = new JButton();
+        changeFeeButton.setText("Change Fee");
+        buttonPanel.add(changeFeeButton, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

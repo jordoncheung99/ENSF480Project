@@ -1,12 +1,16 @@
 package GUI;
 
 import Server.Address;
+import Server.Criteria;
 import Server.Property;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class ViewProperties {
@@ -18,10 +22,13 @@ public class ViewProperties {
     private JButton emailButton;
     private JList displayList;
     private JFrame frame;
+    private CriteriaGUI criteriaGUI;
 
     ArrayList<Property> properties;
+    private PrintWriter outBuffer;
+    private BufferedReader inBuffer;
 
-    public ViewProperties() {
+    public ViewProperties(PrintWriter outBuffer, BufferedReader inBuffer) {
         frame = new JFrame("Manger");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,6 +37,8 @@ public class ViewProperties {
         emailButton.addActionListener(new ALEmail());
         criteriaCreateButton.addActionListener(new ALCreateCriteria());
         properties = new ArrayList<>();
+        this.outBuffer = outBuffer;
+        this.inBuffer = inBuffer;
 
         //Fill in data
 
@@ -64,16 +73,34 @@ public class ViewProperties {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            criteriaGUI = new CriteriaGUI(new ALRegCritera());
 
-            //TODO MOVE TO CRETIERA FORM
-            properties.add(new Property(100, 200, 300, 400, 500, true, new Address("yes", "no", "maybe", "so", "what"), "GARBAGE", 10, true, true, true, null, null));
+        }
+    }
 
-            Property[] temp = new Property[properties.size()];
-            for (int i = 0; i < properties.size(); i++) {
-                temp[i] = properties.get(i);
+    private class ALRegCritera implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            Criteria criteria = criteriaGUI.pullCriteria();
+
+            outBuffer.println(criteria.toServerString());
+            String[] parts = new String[0];
+            try {
+                parts = Client.readServer(inBuffer).split("#");
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            displayList = new JList(temp);
+            Property properties[] = new Property[parts.length];
+            for (int i = 0; i < parts.length; i++) {
+                properties[i] = new Property(parts[i]);
+            }
+            panel1.remove(displayList);
+            displayList = new JList(properties);
             panel1.add(displayList);
+
         }
     }
 

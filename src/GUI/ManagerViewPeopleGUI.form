@@ -22,7 +22,7 @@
             <properties>
               <font name="Bradley Hand ITC" size="24" style="1"/>
               <foreground color="-16579837"/>
-              <text value="View Landlords"/>
+              <text value="People On the system"/>
             </properties>
           </component>
         </children>

@@ -18,6 +18,7 @@ public class AddHandler extends Handler {
         if (!input.contains("ADD")){
             return false;
         }
+        //System.out.println(input);
         String parts[] = input.split("#");
         Property p = new Property(parts[1]);
         rpms.addNewProperty(p, username);

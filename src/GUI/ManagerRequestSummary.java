@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class ManagerRequestSummary {
     private JPanel panel1;
@@ -16,13 +19,18 @@ public class ManagerRequestSummary {
     private JTextField endEpochField;
     private JList reportList;
     private JButton requestButton;
+    private JPanel listPanel;
     private JFrame frame;
+    PrintWriter outBuffer;
+    BufferedReader inBuffer;
 
-    ManagerRequestSummary() {
+    ManagerRequestSummary(PrintWriter outBuffer, BufferedReader inBuffer) {
         frame = new JFrame("SummaryForm");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
+        this.outBuffer = outBuffer;
+        this.inBuffer = inBuffer;
         requestButton.addActionListener(new ALReuest());
         backButton.addActionListener(new ALBack());
         frame.setVisible(true);
@@ -49,7 +57,22 @@ public class ManagerRequestSummary {
             }
 
             String send = "REPORT#" + startTime + "#" + endTime;
-            System.out.println("Route to server: " + send);
+            outBuffer.println(send);
+            String test = "";
+            try {
+                test = Client.readServer(inBuffer);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            String[] listParts = test.split("#");
+            for (int i = 0; i < listParts.length; i++) {
+                System.out.println(listParts[i]);
+            }
+            listPanel.remove(reportList);
+            reportList = new JList(listParts);
+            listPanel.add(reportList);
             //TODO work with server, assume we get back shit
 
         }
@@ -119,11 +142,11 @@ public class ManagerRequestSummary {
         panel4.add(label3, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         endEpochField = new JTextField();
         panel4.add(endEpochField, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        final JPanel panel5 = new JPanel();
-        panel5.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        panel2.add(panel5, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        listPanel = new JPanel();
+        listPanel.setLayout(new BorderLayout(0, 0));
+        panel2.add(listPanel, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         reportList = new JList();
-        panel5.add(reportList, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+        listPanel.add(reportList, BorderLayout.CENTER);
     }
 
     /**

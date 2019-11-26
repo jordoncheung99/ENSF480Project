@@ -94,6 +94,7 @@ public class RPMS {
     }
 
     public String modifyListing(int propertyID, Property property, String username){
+        //TODO: Fix the landlord.
         try {
             Connection conn = database.getConnection();
             PreparedStatement state = conn.prepareStatement("SELECT * FROM property WHERE listID = ? AND landlord = ?");

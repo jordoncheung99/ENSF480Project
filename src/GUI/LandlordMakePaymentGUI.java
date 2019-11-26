@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class LandlordMakePaymentGUI {
     private JPanel panel1;
@@ -16,11 +19,15 @@ public class LandlordMakePaymentGUI {
     private JTextArea propertyIDField;
     private JFrame frame;
 
-    LandlordMakePaymentGUI() {
+    private PrintWriter outBuffer;
+    private BufferedReader inBuffer;
+    LandlordMakePaymentGUI(PrintWriter out, BufferedReader in) {
         frame = new JFrame("PaymentForm");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
+        this.outBuffer = out;
+        this.inBuffer = in;
         //registerButton.addActionListener(new LandlordRegisterPropertyGUI.ALRegister());
         backButton.addActionListener(new ALBack());
         submitButton.addActionListener(new ALPayment());
@@ -59,7 +66,14 @@ public class LandlordMakePaymentGUI {
 
             if (worked) {
                 String send = "PAYFEE#" + amount + "#" + ID;
-                System.out.println(send);
+                outBuffer.println(send);
+                try {
+                    System.out.println(Client.readServer(inBuffer));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
                 frame.dispose();
             }
 

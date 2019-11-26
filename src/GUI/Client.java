@@ -6,6 +6,8 @@ package GUI;/*
  */
 
 
+import Server.Manager;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -62,14 +64,14 @@ class Client {
 
 
 		// Close the socket
-		clientSocket.close();
+		//clientSocket.close();
 	}
 
 	private void openCorrectGUI(String input){
 		if(input.contains("LANDLORD")){
 			LandlordGUI gui = new LandlordGUI(outBuffer,inBuffer);
 		}else if(input.contains("MANAGER")){
-			System.out.println("MANAGER");
+			ManagerGUI gui = new ManagerGUI(outBuffer, inBuffer);
 		}else if (input.contains("RENTER")){
 			System.out.println("REGRENTER");
 		}else if (input.contains("RENT")){
